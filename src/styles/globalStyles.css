@@ -1,0 +1,64 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-primary: #ff501b;
+  --color-primary-light: #ffddd2;
+  --color-primary-light-2: #fff8f6;
+
+  --color-gray-1: #171717;
+  --color-gray-2: #6a6a6a;
+  --color-gray-3: #d2d2d2;
+  --color-gray-4: #f8f8f8;
+
+  --color-gray-border: #e8e8e8;
+
+  --color-white: #ffffff;
+  --color-black: #000000;
+
+  --text-title: 18px;
+  --text-header: 16px;
+  --text-body: 14px;
+  --text-caption: 12px;
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  src: url('/fonts/Pretendard-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  src: url('/fonts/Pretendard-SemiBold.woff2') format('woff2');
+
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  min-height: 100dvh;
+}
+
+@layer base {
+  body {
+    font-family:
+      Pretendard,
+      -apple-system,
+      BlinkMacSystemFont,
+      system-ui,
+      Roboto,
+      'Helvetica Neue',
+      Arial,
+      sans-serif;
+    background-color: #fff;
+    color: var(--color-gray-1);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+}

@@ -1,0 +1,37 @@
+---
+description: React 컴포넌트 규칙
+globs:
+alwaysApply: false
+---
+
+## 파일 구조 및 설명
+
+- 더 나은 파일 구조나 방법이 있다면 제안하세요.
+- 현재 파일 구조는 아래와 같습니다.
+  src/
+  ├── assets/ # 이미지, 폰트 등 정적 리소스
+  ├── components/ # 재사용 가능한 컴포넌트
+  │ ├── common/ # 공통 컴포넌트
+  │ ├── layout/ # 레이아웃 관련 컴포넌트
+  │ └── features/ # 특정 기능과 관련된 컴포넌트
+  ├── hooks/ # 커스텀 훅
+  ├── pages/ # 페이지 컴포넌트
+  ├── services/ # API 로직
+  ├── store/ # 전역 상태 관리
+  ├── styles/ # 전역 스타일, 테마 설정
+  ├── types/ # TypeScript 타입 정의
+  ├── utils/ # 유틸리티 함수
+  └── constants/ # 상수 정의
+
+## 컴포넌트 작성 규칙
+
+- 파일명은 PascalCase로 작성하세요.
+- 함수형 컴포넌트를 사용하세요.
+- useEffect에서 정리(clean up) 함수를 작성해 메모리 누수를 방지하세요.
+- 필요할 때 React.memo, useCallback, useMemo를 사용해 컴포넌트를 메모이제이션하세요.
+- JSX 내에서 인라인 함수 사용을 피하고, 이벤트 핸들러는 외부로 빼거나 useCallback으로 감싸세요.
+
+## 타입스크립트 사용
+
+- props 인터페이스는 'P' 접두사를 사용합니다.
+- 컴포넌트 내부에서 사용되는 타입은 'T' 접두사를 사용합니다.

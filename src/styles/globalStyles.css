@@ -62,3 +62,14 @@ body,
     text-rendering: optimizeLegibility;
   }
 }
+
+button {
+  all: unset;
+  cursor: pointer;
+}
+
+input {
+  background: none;
+  border: none;
+  outline: none;
+}

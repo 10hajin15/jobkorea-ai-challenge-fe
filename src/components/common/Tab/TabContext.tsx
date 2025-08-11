@@ -1,7 +1,7 @@
-import type { TabContextValue } from '@/types/tab';
+import type { TTabContextValue } from '@/types/tab';
 import { createContext, useContext, useState } from 'react';
 
-const TabContext = createContext<TabContextValue | null>(null);
+const TabContext = createContext<TTabContextValue | null>(null);
 
 export const useTabContext = () => {
   const context = useContext(TabContext);

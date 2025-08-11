@@ -1,10 +1,5 @@
 import ClosedIcon from '@/components/icons/ClosedIcon';
-
-interface PChip {
-  label: string;
-  color: 'primary' | 'gray';
-  onRemove: () => void;
-}
+import type { TChip } from '@/types/chip';
 
 const COLOR_CLASS = {
   primary: 'bg-primary-light-2 text-primary',
@@ -16,7 +11,7 @@ const REMOVE_ICON_COLOR_CLASS = {
   gray: '#6a6a6a',
 };
 
-const Chip = ({ label, color, onRemove }: PChip) => {
+const Chip = ({ label, color = 'gray', onRemove }: TChip) => {
   return (
     <div
       className={`${COLOR_CLASS[color]} inline-flex h-[22px] items-center gap-[6px] rounded-[4px] px-[10px] py-[4px]`}

@@ -1,4 +1,4 @@
-import ClosedIcon from './icons/ClosedIcon';
+import ClosedIcon from '@/components/icons/ClosedIcon';
 
 interface PChip {
   label: string;

@@ -1,5 +1,5 @@
 import searchIcon from '@/assets/icons/SearchIcon.svg';
-import ClosedIcon from '@/components/common/icons/ClosedIcon';
+import ClosedIcon from '@/components/icons/ClosedIcon';
 import { useState, type ChangeEvent } from 'react';
 
 interface PSearchInput {

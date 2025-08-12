@@ -2,8 +2,8 @@ import ClosedIcon from '@/components/icons/ClosedIcon';
 import type { TChip } from '@/types/chip';
 
 const COLOR_CLASS = {
-  primary: 'bg-primary-light-2 text-primary',
-  gray: 'bg-gray-4 text-gray-2',
+  primary: 'bg-primary-light-2 text-primary border border-primary-light',
+  gray: 'bg-gray-4 text-gray-2 border border-gray-border',
 };
 
 const REMOVE_ICON_COLOR_CLASS = {

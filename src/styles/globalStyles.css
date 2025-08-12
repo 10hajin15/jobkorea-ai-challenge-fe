@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@import 'tailwind-scrollbar-hide/v4';
 
 @theme {
   --color-primary: #ff501b;
@@ -63,7 +64,6 @@ body,
 }
 
 button {
-  all: unset;
   cursor: pointer;
 }
 

@@ -1,15 +1,14 @@
-import type { TChip } from '@/types/chip';
 import Chip from './Chip';
+import useFilterStore from '@/store/useFilterStore';
 
-const SelectedFilters = ({ chipsData }: { chipsData: TChip[] }) => {
+const SelectedFilters = () => {
+  const { filterList, removeFilter } = useFilterStore();
+
   return (
-    <div className="flex h-[100px] flex-col p-[10px]">
-      <div className="mb-[10px] flex justify-end">
-        <div className="text-caption text-gray-2 cursor-pointer">초기화</div>
-      </div>
-      <div className="flex flex-1 flex-wrap gap-[10px] overflow-y-auto">
-        {chipsData.map((chip) => (
-          <Chip key={chip.label} label={chip.label} onRemove={chip.onRemove} />
+    <div className="bg-gray-4 flex h-[72px] flex-col p-[10px]">
+      <div className="scrollbar-hide flex flex-1 flex-wrap gap-[8px] overflow-y-auto">
+        {filterList.map((filter, i) => (
+          <Chip key={i} label={filter} onRemove={() => removeFilter(filter)} />
         ))}
       </div>
     </div>

@@ -40,7 +40,7 @@ const TabNavigation = () => {
   return (
     <div
       ref={containerRef}
-      className="relative flex h-[48px] w-full items-center justify-between px-[24px]"
+      className="border-gray-border relative flex h-[44px] w-full items-center justify-between border-b px-[24px]"
     >
       {MAIN_TABS.map((tab, index) => (
         <div
@@ -61,7 +61,7 @@ const TabNavigation = () => {
         </div>
       ))}
       <div
-        className="bg-primary absolute bottom-0 h-0.5 rounded-full transition-all duration-300 ease-out"
+        className="bg-primary absolute bottom-[-1px] h-0.5 rounded-full transition-all duration-300 ease-out"
         style={getIndicatorStyle()}
       />
     </div>

@@ -1,59 +1,61 @@
 import FilterContent from '@/components/layout/FilterContentLayout';
 import { DAYS, WORK_DAYS, WORK_PERIOD, WORK_TIME } from '@/constants/period';
 import TagList from '@/components/common/TagList';
-import ToggleButton from '@/components/common/ToggleButton';
 import TimePicker from '@/components/common/TimePicker';
 import { useState } from 'react';
-import type { TFilterMode, TTagClickHandler } from '@/types/filter';
+import type { FilterMode, TagClickHandler } from '@/types/filter';
 import useFilterStore from '@/store/useFilterStore';
 import { useTabContext } from '@/components/common/Tab/TabContext';
 import type { TabId } from '@/types/filter';
+import ModeSection from '../common/ModeSection';
 
 const WorkPeriod = () => {
-  const [workDaysFilter, setWorkDaysFilter] = useState<TFilterMode>('목록에서 선택');
-  const [workTimeFilter, setWorkTimeFilter] = useState<TFilterMode>('목록에서 선택');
+  const [workDaysFilter, setWorkDaysFilter] = useState<FilterMode>('목록에서 선택');
+  const [workTimeFilter, setWorkTimeFilter] = useState<FilterMode>('목록에서 선택');
 
   const { activeTab } = useTabContext();
-  const tabId = activeTab as unknown as TabId;
-  const { toggle, getSelectedByTab } = useFilterStore();
+  const tabId = activeTab as TabId;
+  const { toggle, getSelectedByTab, remove } = useFilterStore();
 
   const [customStartTime, setCustomStartTime] = useState('');
   const [customEndTime, setCustomEndTime] = useState('');
 
-  const handleWorkDaysTagClick: TTagClickHandler = (workDay) => {
+  const handleWorkDaysTagClick: TagClickHandler = (workDay) => {
     toggle(
       tabId,
       { id: `workDays:${workDay}`, label: workDay, group: 'workDays' },
-      {
-        group: 'workDays',
-        groupLimit: 10,
-      },
+      workDaysFilter === '목록에서 선택'
+        ? { group: 'workDays', groupLimit: 3 }
+        : { group: 'workDays' },
     );
   };
 
-  const handleWorkTimeTagClick: TTagClickHandler = (workTime) => {
+  const handleWorkTimeTagClick: TagClickHandler = (workTime) => {
     toggle(
       tabId,
       { id: `workTime:${workTime}`, label: workTime, group: 'workTime' },
-      {
-        group: 'workTime',
-        groupLimit: 10,
-      },
+      workTimeFilter === '목록에서 선택'
+        ? { group: 'workTime', groupLimit: 3 }
+        : { group: 'workTime' },
     );
   };
 
   return (
     <>
-      <FilterContent title="근무기간" count={1} total={6}>
+      <FilterContent
+        title="근무기간"
+        count={getSelectedByTab(tabId).filter((f) => f.item.group === 'workPeriod').length}
+        total={6}
+      >
         <TagList
           items={WORK_PERIOD}
-          onTagClick={(period) =>
+          onTagClick={(period: string) =>
             toggle(
               tabId,
               { id: `workPeriod:${period}`, label: period, group: 'workPeriod' },
               {
                 group: 'workPeriod',
-                groupLimit: 10,
+                groupLimit: 6,
               },
             )
           }
@@ -63,16 +65,20 @@ const WorkPeriod = () => {
         />
       </FilterContent>
 
-      <FilterContent
+      <ModeSection
         title="근무요일"
-        {...(workDaysFilter === '목록에서 선택' && { count: 0, total: 3 })}
-      >
-        <ToggleButton
-          options={['목록에서 선택', '직접 선택']}
-          value={workDaysFilter}
-          onChange={(value) => setWorkDaysFilter(value as TFilterMode)}
-        />
-        {workDaysFilter === '목록에서 선택' && (
+        mode={workDaysFilter}
+        setMode={setWorkDaysFilter}
+        activeCount={getSelectedByTab(tabId).filter((f) => f.item.group === 'workDays').length}
+        total={3}
+        onModeChange={(next) => {
+          if (next !== workDaysFilter) {
+            getSelectedByTab(tabId)
+              .filter((f) => f.item.group === 'workDays')
+              .forEach((f) => remove(tabId, f.item.id));
+          }
+        }}
+        listContent={
           <TagList
             items={WORK_DAYS}
             onTagClick={handleWorkDaysTagClick}
@@ -80,8 +86,8 @@ const WorkPeriod = () => {
               .filter((f) => f.item.group === 'workDays')
               .map((f) => f.item.label)}
           />
-        )}
-        {workDaysFilter === '직접 선택' && (
+        }
+        directContent={
           <TagList
             items={DAYS}
             className="flex flex-wrap justify-end gap-[8px]"
@@ -90,19 +96,25 @@ const WorkPeriod = () => {
               .filter((f) => f.item.group === 'workDays')
               .map((f) => f.item.label)}
           />
-        )}
-      </FilterContent>
+        }
+      />
 
-      <FilterContent
+      <ModeSection
         title="근무시간"
-        {...(workDaysFilter === '목록에서 선택' && { count: 0, total: 3 })}
-      >
-        <ToggleButton
-          options={['목록에서 선택', '직접 선택']}
-          value={workTimeFilter}
-          onChange={(value) => setWorkTimeFilter(value as TFilterMode)}
-        />
-        {workTimeFilter === '목록에서 선택' && (
+        mode={workTimeFilter}
+        setMode={setWorkTimeFilter}
+        activeCount={getSelectedByTab(tabId).filter((f) => f.item.group === 'workTime').length}
+        total={3}
+        onModeChange={(next) => {
+          if (next !== workTimeFilter) {
+            getSelectedByTab(tabId)
+              .filter((f) => f.item.group === 'workTime')
+              .forEach((f) => remove(tabId, f.item.id));
+            setCustomStartTime('');
+            setCustomEndTime('');
+          }
+        }}
+        listContent={
           <TagList
             items={WORK_TIME}
             onTagClick={handleWorkTimeTagClick}
@@ -110,8 +122,8 @@ const WorkPeriod = () => {
               .filter((f) => f.item.group === 'workTime')
               .map((f) => f.item.label)}
           />
-        )}
-        {workTimeFilter === '직접 선택' && (
+        }
+        directContent={
           <div className="flex items-center gap-[8px]">
             <TimePicker
               value={customStartTime}
@@ -131,8 +143,8 @@ const WorkPeriod = () => {
               placeholder="종료시간"
             />
           </div>
-        )}
-      </FilterContent>
+        }
+      />
     </>
   );
 };

@@ -1,4 +1,4 @@
-export interface TChip {
+export interface ChipProps {
   label: string;
   color?: 'primary' | 'gray';
   onRemove: () => void;

@@ -1,6 +1,6 @@
-export type TFilterMode = '목록에서 선택' | '직접 선택';
+export type FilterMode = '목록에서 선택' | '직접 선택';
 
-export type TTagClickHandler = (item: string) => void;
+export type TagClickHandler = (item: string) => void;
 
 export type TabId = 0 | 1 | 2 | 3;
 

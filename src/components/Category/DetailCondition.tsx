@@ -23,12 +23,13 @@ const MoneyInput = () => {
     </div>
   );
 };
+
 const DetailCondition = () => {
   const { activeTab } = useTabContext();
-  const tabId = activeTab as unknown as TabId;
-  const { toggle, getSelectedByTab } = useFilterStore();
+  const tabId = activeTab as TabId;
+  const { toggle, getSelectedByTab, add, remove } = useFilterStore();
 
-  const [age, setAge] = useState<number>(0);
+  const [age, setAge] = useState<number>(10);
   const [includeKeywords, setIncludeKeywords] = useState<string[]>([
     '비서',
     '행복',
@@ -39,11 +40,21 @@ const DetailCondition = () => {
     '444',
     '행복32',
   ]);
-  const [excludeKeywords, setExcludeKeywords] = useState<string[]>(['가족같은']);
+  const [excludeKeywords, setExcludeKeywords] = useState<string[]>(['12345']);
 
-  const AGE_MIN = 0;
+  const AGE_MIN = 10;
   const AGE_MAX = 80;
-  const percent = useMemo(() => ((age - AGE_MIN) / (AGE_MAX - AGE_MIN)) * 100, [age]);
+  const selectedAge = getSelectedByTab(tabId).find((f) => f.item.group === 'age');
+  const percent = useMemo(
+    () => (selectedAge ? ((age - AGE_MIN) / (AGE_MAX - AGE_MIN)) * 100 : 0),
+    [age, selectedAge],
+  );
+
+  const handleClearAge = () => {
+    if (selectedAge) {
+      remove(tabId, selectedAge.item.id);
+    }
+  };
 
   const handleClickWorkType = (tag: string) => {
     toggle(
@@ -119,10 +130,36 @@ const DetailCondition = () => {
       >
         <div className="age-slider mt-[10px] w-full">
           <div className="text-body mb-[8px] flex items-center justify-center gap-[6px]">
-            <span className="text-gray-2">{age}</span>
-            <span className="text-gray-3">세</span>
+            {selectedAge ? (
+              <>
+                <span className="text-gray-2">{age}</span>
+                <span className="text-gray-3">세</span>
+              </>
+            ) : (
+              <span className="text-gray-3">미선택</span>
+            )}
           </div>
-          <Slider percent={percent} AGE_MIN={AGE_MIN} AGE_MAX={AGE_MAX} age={age} setAge={setAge} />
+          {selectedAge && (
+            <div className="mb-[6px] flex justify-end">
+              <button className="text-caption text-gray-2 underline" onClick={handleClearAge}>
+                선택 해제
+              </button>
+            </div>
+          )}
+          <Slider
+            percent={percent}
+            AGE_MIN={AGE_MIN}
+            AGE_MAX={AGE_MAX}
+            age={selectedAge ? age : AGE_MIN}
+            setAge={(v) => {
+              setAge(v);
+              add(
+                tabId,
+                { id: `age:${v}`, label: `${v}세`, group: 'age' },
+                { group: 'age', groupLimit: 1 },
+              );
+            }}
+          />
         </div>
       </FilterContent>
       <FilterContent title="키워드 포함 / 제외">

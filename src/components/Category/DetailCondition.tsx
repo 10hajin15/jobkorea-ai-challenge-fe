@@ -1,0 +1,140 @@
+import FilterContent from '@/components/layout/FilterContentLayout';
+import TagList from '../common/TagList';
+import { MONEY_CONDITION, WORK_TYPE } from '@/constants/detail';
+import { useMemo, useState } from 'react';
+import ToggleButton from '../common/ToggleButton';
+import useFilterStore from '@/store/useFilterStore';
+import Slider from '../common/Slider';
+import KeyWord from '../common/KeyWord';
+import { useTabContext } from '@/components/common/Tab/TabContext';
+import type { TabId } from '@/types/filter';
+
+const MoneyInput = () => {
+  return (
+    <div className="mt-[10px] flex items-center justify-center gap-[4px]">
+      <div className="border-gray-border h-[40px] rounded-[4px] border">
+        <input
+          className="placeholder:text-gray-3 h-full w-full p-[14px] text-end"
+          placeholder="0"
+          type="number"
+        />
+      </div>
+      <div className="text-body text-gray-2">원 이상</div>
+    </div>
+  );
+};
+const DetailCondition = () => {
+  const { activeTab } = useTabContext();
+  const tabId = activeTab as unknown as TabId;
+  const { toggle, getSelectedByTab } = useFilterStore();
+
+  const [age, setAge] = useState<number>(0);
+  const [includeKeywords, setIncludeKeywords] = useState<string[]>([
+    '비서',
+    '행복',
+    '123',
+    '12',
+    '14325',
+    '424',
+    '444',
+    '행복32',
+  ]);
+  const [excludeKeywords, setExcludeKeywords] = useState<string[]>(['가족같은']);
+
+  const AGE_MIN = 0;
+  const AGE_MAX = 80;
+  const percent = useMemo(() => ((age - AGE_MIN) / (AGE_MAX - AGE_MIN)) * 100, [age]);
+
+  const handleClickWorkType = (tag: string) => {
+    toggle(
+      tabId,
+      { id: `employmentType:${tag}`, label: tag, group: 'employmentType' },
+      {
+        group: 'employmentType',
+        groupLimit: 7,
+      },
+    );
+  };
+
+  const handleClickMoneyCondition = (tag: string) => {
+    toggle(
+      tabId,
+      { id: `money:${tag}`, label: tag, group: 'moneyCondition' },
+      {
+        group: 'moneyCondition',
+        groupLimit: 1,
+      },
+    );
+  };
+
+  const handleClickGender = (tag: string) => {
+    toggle(
+      tabId,
+      { id: `gender:${tag}`, label: tag, group: 'gender' },
+      {
+        group: 'gender',
+        groupLimit: 1,
+      },
+    );
+  };
+
+  return (
+    <>
+      <FilterContent
+        title="고용형태"
+        count={getSelectedByTab(tabId).filter((f) => f.item.group === 'employmentType').length}
+        total={7}
+      >
+        <TagList
+          items={WORK_TYPE}
+          onTagClick={handleClickWorkType}
+          activeItems={getSelectedByTab(tabId)
+            .filter((f) => f.item.group === 'employmentType')
+            .map((f) => f.item.label)}
+        />
+      </FilterContent>
+      <FilterContent title="급여조건">
+        <TagList
+          items={MONEY_CONDITION}
+          onTagClick={handleClickMoneyCondition}
+          activeItems={getSelectedByTab(tabId)
+            .filter((f) => f.item.group === 'moneyCondition')
+            .map((f) => f.item.label)}
+        />
+        <MoneyInput />
+      </FilterContent>
+      <FilterContent
+        title="성별"
+        exceptDetail={{ label: '무관제외', checked: false, onChange: () => {} }}
+      >
+        <ToggleButton
+          options={['남자', '여자']}
+          value={getSelectedByTab(tabId).find((f) => f.item.group === 'gender')?.item.label ?? ''}
+          onChange={handleClickGender}
+        />
+      </FilterContent>
+      <FilterContent
+        title="연령"
+        exceptDetail={{ label: '무관제외', checked: false, onChange: () => {} }}
+      >
+        <div className="age-slider mt-[10px] w-full">
+          <div className="text-body mb-[8px] flex items-center justify-center gap-[6px]">
+            <span className="text-gray-2">{age}</span>
+            <span className="text-gray-3">세</span>
+          </div>
+          <Slider percent={percent} AGE_MIN={AGE_MIN} AGE_MAX={AGE_MAX} age={age} setAge={setAge} />
+        </div>
+      </FilterContent>
+      <FilterContent title="키워드 포함 / 제외">
+        <KeyWord
+          includeKeywords={includeKeywords}
+          excludeKeywords={excludeKeywords}
+          setIncludeKeywords={setIncludeKeywords}
+          setExcludeKeywords={setExcludeKeywords}
+        />
+      </FilterContent>
+    </>
+  );
+};
+
+export default DetailCondition;

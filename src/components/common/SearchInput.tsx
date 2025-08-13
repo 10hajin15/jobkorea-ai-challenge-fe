@@ -2,18 +2,23 @@ import searchIcon from '@/assets/icons/SearchIcon.svg';
 import ClosedIcon from '@/components/icons/ClosedIcon';
 import { useState, type ChangeEvent } from 'react';
 
-interface PSearchInput {
+interface SearchInputProps {
   placeholder?: string;
   onSearch: (value: string) => void;
 }
 
-const SearchInput = ({ placeholder = '검색어를 입력해주세요.', onSearch }: PSearchInput) => {
+const SearchInput = ({ placeholder = '검색어를 입력해주세요.', onSearch }: SearchInputProps) => {
   const [value, setValue] = useState('');
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     setValue(newValue);
     onSearch(newValue);
+  };
+
+  const handleClear = () => {
+    setValue('');
+    onSearch('');
   };
 
   return (
@@ -27,7 +32,7 @@ const SearchInput = ({ placeholder = '검색어를 입력해주세요.', onSearc
       />
       <div className="h-[24px] w-[24px] shrink-0">
         {value ? (
-          <button onClick={() => setValue('')} aria-label="clear">
+          <button onClick={handleClear} aria-label="clear">
             <ClosedIcon width={20} height={20} color="#D2D2D2" />
           </button>
         ) : (

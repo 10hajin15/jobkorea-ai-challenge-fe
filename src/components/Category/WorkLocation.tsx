@@ -10,7 +10,7 @@ import type { TabId } from '@/types/filter';
 
 const WorkLocation = () => {
   const { activeTab } = useTabContext();
-  const tabId = activeTab as unknown as TabId;
+  const tabId = activeTab as TabId;
   const [locationValue, setLocationValue] = useState<CascaderValue>({});
   const { getSelectedByTab, toggle, clearTab, remove } = useFilterStore();
   const MAX_SELECTION = 10;
@@ -25,8 +25,6 @@ const WorkLocation = () => {
 
       if (!isLeaf) return;
       toggle(tabId, { id: lastOption.value, label }, { limit: MAX_SELECTION });
-
-      console.log('Location selected:', value, selectedOptions);
     },
     [tabId, toggle],
   );

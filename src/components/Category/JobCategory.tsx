@@ -10,7 +10,7 @@ import type { TabId } from '@/types/filter';
 
 const JobCategory = () => {
   const { activeTab } = useTabContext();
-  const tabId = activeTab as unknown as TabId;
+  const tabId = activeTab as TabId;
   const [categoryValue, setCategoryValue] = useState<CascaderValue>({});
   const { getSelectedByTab, toggle, clearTab, remove } = useFilterStore();
   const MAX_SELECTION = 10;

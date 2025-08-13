@@ -1,7 +1,7 @@
 import FilterContent from '@/components/layout/FilterContentLayout';
 import TagList from '../common/TagList';
 import { MONEY_CONDITION, WORK_TYPE } from '@/constants/detail';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import ToggleButton from '../common/ToggleButton';
 import useFilterStore from '@/store/useFilterStore';
 import Slider from '../common/Slider';
@@ -9,14 +9,32 @@ import KeyWord from '../common/KeyWord';
 import { useTabContext } from '@/components/common/Tab/TabContext';
 import type { TabId } from '@/types/filter';
 
-const MoneyInput = () => {
+interface MoneyInputProps {
+  value: string;
+  onChange: (value: string) => void;
+  disabled?: boolean;
+}
+const MoneyInput = ({ value, onChange, disabled = false }: MoneyInputProps) => {
+  const formatWithCommas = (raw: string) => raw.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  const stripNonDigits = (raw: string) => raw.replace(/[^0-9]/g, '');
+  const displayValue = value ? formatWithCommas(stripNonDigits(value)) : '';
+
   return (
     <div className="mt-[10px] flex items-center justify-center gap-[4px]">
-      <div className="border-gray-border h-[40px] rounded-[4px] border">
+      <div
+        className={`border-gray-border h-[40px] rounded-[4px] border ${disabled ? 'opacity-50' : ''}`}
+      >
         <input
           className="placeholder:text-gray-3 h-full w-full p-[14px] text-end"
           placeholder="0"
-          type="number"
+          type="text"
+          inputMode="numeric"
+          value={displayValue}
+          onChange={(e) => {
+            const digits = stripNonDigits(e.target.value);
+            onChange(digits === '' ? '' : formatWithCommas(digits));
+          }}
+          disabled={disabled}
         />
       </div>
       <div className="text-body text-gray-2">원 이상</div>
@@ -41,6 +59,7 @@ const DetailCondition = () => {
     '행복32',
   ]);
   const [excludeKeywords, setExcludeKeywords] = useState<string[]>(['12345']);
+  const [moneyValue, setMoneyValue] = useState<string>('');
 
   const AGE_MIN = 10;
   const AGE_MAX = 80;
@@ -68,6 +87,8 @@ const DetailCondition = () => {
   };
 
   const handleClickMoneyCondition = (tag: string) => {
+    const selected = getSelectedByTab(tabId).find((f) => f.item.group === 'moneyCondition');
+    const isDeselecting = selected && selected.item.label === tag;
     toggle(
       tabId,
       { id: `money:${tag}`, label: tag, group: 'moneyCondition' },
@@ -76,7 +97,19 @@ const DetailCondition = () => {
         groupLimit: 1,
       },
     );
+    if (isDeselecting) {
+      setMoneyValue('');
+    }
   };
+
+  const selectedMoneyCondition = getSelectedByTab(tabId).find(
+    (f) => f.item.group === 'moneyCondition',
+  );
+  useEffect(() => {
+    if (!selectedMoneyCondition && moneyValue !== '') {
+      setMoneyValue('');
+    }
+  }, [selectedMoneyCondition]);
 
   const handleClickGender = (tag: string) => {
     toggle(
@@ -112,7 +145,11 @@ const DetailCondition = () => {
             .filter((f) => f.item.group === 'moneyCondition')
             .map((f) => f.item.label)}
         />
-        <MoneyInput />
+        <MoneyInput
+          value={moneyValue}
+          onChange={setMoneyValue}
+          disabled={!selectedMoneyCondition}
+        />
       </FilterContent>
       <FilterContent
         title="성별"

@@ -1,4 +1,4 @@
-interface PTag {
+interface TagProps {
   label: string;
   active: boolean;
   onClick: () => void;
@@ -9,7 +9,7 @@ const TAG_COLOR_CLASS = {
   inactive: 'bg-gray-4 text-gray-2 border border-gray-4',
 };
 
-const Tag = ({ label, active, onClick }: PTag) => {
+const Tag = ({ label, active, onClick }: TagProps) => {
   return (
     <div
       onClick={onClick}

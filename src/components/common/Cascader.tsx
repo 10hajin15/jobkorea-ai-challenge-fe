@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import type { CascaderOption, CascaderValue, PCascaderProps } from '../../types/cascader';
+import type { CascaderOption, CascaderValue, CascaderProps } from '@/types/cascader';
 
 const Cascader = ({
   options = [],
@@ -8,7 +8,7 @@ const Cascader = ({
   placeholder = [''],
   maxDepth = 3,
   selectedLeafLabels = [],
-}: PCascaderProps) => {
+}: CascaderProps) => {
   const getSelectedOption = (depth: number): CascaderOption | null => {
     if (depth === 0) {
       return options.find((opt) => opt.value === value[0]) || null;

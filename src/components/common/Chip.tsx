@@ -1,5 +1,5 @@
 import ClosedIcon from '@/components/icons/ClosedIcon';
-import type { TChip } from '@/types/chip';
+import type { ChipProps } from '@/types/chip';
 
 const COLOR_CLASS = {
   primary: 'bg-primary-light-2 text-primary border border-primary-light',
@@ -11,7 +11,7 @@ const REMOVE_ICON_COLOR_CLASS = {
   gray: '#6a6a6a',
 };
 
-const Chip = ({ label, color = 'gray', onRemove }: TChip) => {
+const Chip = ({ label, color = 'gray', onRemove }: ChipProps) => {
   return (
     <div
       className={`${COLOR_CLASS[color]} inline-flex h-[22px] shrink-0 items-center gap-[6px] rounded-[4px] px-[10px] py-[4px] whitespace-nowrap`}

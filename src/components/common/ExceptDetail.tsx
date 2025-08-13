@@ -1,12 +1,12 @@
 import { useState } from 'react';
 
-interface PExceptDetail {
+interface ExceptDetailProps {
   label: string;
   checked?: boolean;
   onChange?: (checked: boolean) => void;
 }
 
-const ExceptDetail = ({ label, checked = false, onChange }: PExceptDetail) => {
+const ExceptDetail = ({ label, checked = false, onChange }: ExceptDetailProps) => {
   const [isChecked, setIsChecked] = useState(checked);
 
   const handleClick = () => {
@@ -17,7 +17,7 @@ const ExceptDetail = ({ label, checked = false, onChange }: PExceptDetail) => {
 
   return (
     <div
-      className={`py-1select-none inline-flex cursor-pointer items-center gap-[4px] rounded px-2`}
+      className={`inline-flex cursor-pointer items-center gap-[4px] rounded px-2 select-none`}
       onClick={handleClick}
     >
       <div

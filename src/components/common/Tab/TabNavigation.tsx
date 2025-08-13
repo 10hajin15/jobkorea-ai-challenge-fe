@@ -2,6 +2,7 @@ import { MAIN_TABS } from '@/constants/tab';
 import { useTabContext } from './TabContext';
 import TabIcon from '@/components/icons/TabIcon';
 import { useRef, useEffect, useState } from 'react';
+import type { TabId } from '@/types/filter';
 
 const TabNavigation = () => {
   const { activeTab, setActiveTab } = useTabContext();
@@ -9,10 +10,8 @@ const TabNavigation = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [indicatorStyle, setIndicatorStyle] = useState({ width: 0, left: 0 });
 
-  console.log(activeTab);
-
   useEffect(() => {
-    const activeIndex = MAIN_TABS.findIndex((tab) => tab.tabId === activeTab);
+    const activeIndex = MAIN_TABS.findIndex((tab) => tab.tabId === (activeTab as TabId));
     const activeTabElement = tabRefs.current[activeIndex];
     const container = containerRef.current;
 
@@ -49,7 +48,7 @@ const TabNavigation = () => {
           }}
           className="relative flex cursor-pointer items-center gap-[4px]"
           key={tab.tabId}
-          onClick={() => setActiveTab(tab.tabId)}
+          onClick={() => setActiveTab(tab.tabId as TabId)}
         >
           <TabIcon tabId={tab.tabId} isActive={activeTab === tab.tabId} />
 

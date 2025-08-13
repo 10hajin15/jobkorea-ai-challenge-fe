@@ -1,7 +1,8 @@
-import type { TTabContextValue } from '@/types/tab';
+import type { TabContextValue } from '@/types/tab';
+import type { TabId } from '@/types/filter';
 import { createContext, useContext, useState } from 'react';
 
-const TabContext = createContext<TTabContextValue | null>(null);
+const TabContext = createContext<TabContextValue | null>(null);
 
 export const useTabContext = () => {
   const context = useContext(TabContext);
@@ -12,7 +13,7 @@ export const useTabContext = () => {
 };
 
 export const TabProvider = ({ children }: { children: React.ReactNode }) => {
-  const [activeTab, setActiveTab] = useState<number>(0);
+  const [activeTab, setActiveTab] = useState<TabId>(0);
 
   return <TabContext.Provider value={{ activeTab, setActiveTab }}>{children}</TabContext.Provider>;
 };

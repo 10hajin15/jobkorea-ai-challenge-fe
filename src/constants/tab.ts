@@ -1,4 +1,6 @@
-export const MAIN_TABS = [
+import type { TabId } from '@/types/filter';
+
+export const MAIN_TABS: Array<{ tabId: TabId; label: string }> = [
   {
     tabId: 0,
     label: '근무지역',

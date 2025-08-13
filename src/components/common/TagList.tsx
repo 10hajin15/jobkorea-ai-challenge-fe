@@ -1,10 +1,10 @@
 import Tag from './Tag';
-import type { TTagClickHandler } from '@/types/filter';
+import type { TagClickHandler } from '@/types/filter';
 
-interface PTagListProps {
+interface TagListProps {
   items: string[];
   className?: string;
-  onTagClick?: TTagClickHandler;
+  onTagClick?: TagClickHandler;
   activeItems?: string[];
 }
 
@@ -13,7 +13,7 @@ const TagList = ({
   className = 'flex flex-wrap gap-[8px]',
   onTagClick = () => {},
   activeItems = [],
-}: PTagListProps) => {
+}: TagListProps) => {
   return (
     <div className={className}>
       {items.map((item) => (

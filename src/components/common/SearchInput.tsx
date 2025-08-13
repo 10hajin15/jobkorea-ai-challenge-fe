@@ -21,7 +21,7 @@ const SearchInput = ({ placeholder = '검색어를 입력해주세요.', onSearc
       <input
         type="text"
         placeholder={placeholder}
-        className="text-detail min-w-0 flex-1"
+        className="text-body placeholder:text-gray-3 flex-1"
         value={value}
         onChange={handleChange}
       />

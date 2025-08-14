@@ -1,5 +1,6 @@
-import type { Dispatch, SetStateAction } from 'react';
+import { useState, type Dispatch, type SetStateAction } from 'react';
 import Chip from './Chip';
+import KeywordModal from './KeywordModal';
 
 interface PKeyWord {
   includeKeywords: string[];
@@ -14,6 +15,7 @@ const KeyWord = ({
   setIncludeKeywords,
   setExcludeKeywords,
 }: PKeyWord) => {
+  const [open, setOpen] = useState(false);
   return (
     <div className="flex flex-col gap-[12px]">
       <div className="flex gap-[8px]">
@@ -61,9 +63,20 @@ const KeyWord = ({
       <button
         type="button"
         className="text-body text-gray-2 border-gray-border h-[44px] w-full rounded-[6px] border"
+        onClick={() => setOpen(true)}
       >
         추가하기
       </button>
+      <KeywordModal
+        isOpen={open}
+        onClose={() => setOpen(false)}
+        includeKeywords={includeKeywords}
+        excludeKeywords={excludeKeywords}
+        onSave={(inc, exc) => {
+          setIncludeKeywords(inc);
+          setExcludeKeywords(exc);
+        }}
+      />
     </div>
   );
 };

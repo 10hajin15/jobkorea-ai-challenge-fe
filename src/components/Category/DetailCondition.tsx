@@ -16,17 +16,8 @@ const DetailCondition = () => {
   const { toggle, getSelectedByTab, add, remove } = useFilterStore();
 
   const [age, setAge] = useState<number>(10);
-  const [includeKeywords, setIncludeKeywords] = useState<string[]>([
-    '비서',
-    '행복',
-    '123',
-    '12',
-    '14325',
-    '424',
-    '444',
-    '행복32',
-  ]);
-  const [excludeKeywords, setExcludeKeywords] = useState<string[]>(['12345']);
+  const [includeKeywords, setIncludeKeywords] = useState<string[]>([]);
+  const [excludeKeywords, setExcludeKeywords] = useState<string[]>([]);
   const [moneyValue, setMoneyValue] = useState<string>('');
 
   const AGE_MIN = 10;

@@ -12,7 +12,7 @@ interface FilterStore extends FilterState {
   remove: (tabId: TabId, id: string) => void;
 
   clearTab: (tabId: TabId) => void;
-  clearAll: () => void;
+  reset: () => void;
 }
 
 const makeKey = (tabId: TabId, id: string) => `${tabId}|${id}`;
@@ -26,7 +26,7 @@ const initialState: FilterState = {
   },
 };
 
-const useFilterStore = create<FilterStore>((set, get) => ({
+const useFilterStore = create<FilterStore>((set, get, store) => ({
   ...initialState,
 
   getSelectedByTab: (tabId) => get().byTab[tabId],
@@ -81,7 +81,7 @@ const useFilterStore = create<FilterStore>((set, get) => ({
     set((state) => ({ ...state, byTab: { ...state.byTab, [tabId]: [] } }));
   },
 
-  clearAll: () => set(() => ({ ...initialState })),
+  reset: () => set(store.getInitialState()),
 }));
 
 export default useFilterStore;

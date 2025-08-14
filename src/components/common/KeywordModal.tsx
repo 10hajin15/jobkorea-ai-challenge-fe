@@ -83,10 +83,10 @@ const KeywordModal = ({
               onChange={() => setMode('exclude')}
             />
             <span
-              className="border-gray-3 peer-checked:border-primary peer-checked:before:bg-primary inline-flex h-[16px] w-[16px] items-center justify-center rounded-full border before:h-[8px] before:w-[8px] before:rounded-full before:bg-transparent before:content-['']"
+              className="border-gray-3 peer-checked:border-gray-2 peer-checked:before:bg-gray-2 inline-flex h-[16px] w-[16px] items-center justify-center rounded-full border before:h-[8px] before:w-[8px] before:rounded-full before:bg-transparent before:content-['']"
               aria-hidden
             />
-            <span className="text-body text-gray-3 peer-checked:text-primary">제외</span>
+            <span className="text-body text-gray-3 peer-checked:text-gray-2">제외</span>
           </label>
         </div>
         <div className="flex w-full items-center gap-[8px]">
@@ -108,7 +108,7 @@ const KeywordModal = ({
         </div>
       </div>
       <div className="flex flex-col gap-[12px]">
-        <div className="flex h-[22px] items-center">
+        <div className="flex items-center">
           <div className="flex w-[80px] items-center gap-[6px]">
             <span className="text-caption text-gray-2">포함</span>
             <div className="flex items-center">
@@ -128,7 +128,7 @@ const KeywordModal = ({
             ))}
           </div>
         </div>
-        <div className="flex h-[22px] items-center">
+        <div className="flex items-center">
           <div className="flex w-[80px] items-center gap-[6px]">
             <span className="text-caption text-gray-2">제외</span>
             <div className="flex items-center">

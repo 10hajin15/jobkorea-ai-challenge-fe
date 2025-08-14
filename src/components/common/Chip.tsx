@@ -14,9 +14,9 @@ const REMOVE_ICON_COLOR_CLASS = {
 const Chip = ({ label, color = 'gray', onRemove }: ChipProps) => {
   return (
     <div
-      className={`${COLOR_CLASS[color]} inline-flex h-[22px] shrink-0 items-center gap-[6px] rounded-[4px] px-[10px] py-[4px] whitespace-nowrap`}
+      className={`${COLOR_CLASS[color]} inline-flex h-[22px] shrink-0 items-center gap-[6px] rounded-[4px] px-[10px] whitespace-nowrap`}
     >
-      <span className="text-caption whitespace-nowrap">{label}</span>
+      <span className="text-caption leading-[12px] whitespace-nowrap">{label}</span>
       <div onClick={onRemove} className="flex items-center justify-center">
         <ClosedIcon
           className="cursor-pointer"

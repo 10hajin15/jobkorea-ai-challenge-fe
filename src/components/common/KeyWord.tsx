@@ -20,7 +20,7 @@ const KeyWord = ({
   const [open, setOpen] = useState(false);
   return (
     <div className="flex flex-col gap-[12px]">
-      <div className="flex h-[22px]">
+      <div className="flex">
         <div className="flex w-[80px] items-center gap-[6px]">
           <span className="text-caption text-gray-2">포함</span>
           <div className="flex items-center">
@@ -40,7 +40,7 @@ const KeyWord = ({
           ))}
         </div>
       </div>
-      <div className="flex h-[22px]">
+      <div className="flex">
         <div className="flex w-[80px] items-center gap-[6px]">
           <span className="text-caption text-gray-2">제외</span>
           <div className="flex items-center">

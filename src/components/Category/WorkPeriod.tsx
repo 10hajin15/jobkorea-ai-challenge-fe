@@ -2,7 +2,7 @@ import FilterContent from '@/components/layout/FilterContentLayout';
 import { DAYS, WORK_DAYS, WORK_PERIOD, WORK_TIME } from '@/constants/period';
 import TagList from '@/components/common/TagList';
 import TimePicker from '@/components/common/TimePicker';
-import { useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import type { FilterMode, TagClickHandler } from '@/types/filter';
 import useFilterStore from '@/store/useFilterStore';
 import { useTabContext } from '@/components/common/Tab/TabContext';
@@ -15,10 +15,27 @@ const WorkPeriod = () => {
 
   const { activeTab } = useTabContext();
   const tabId = activeTab as TabId;
-  const { toggle, getSelectedByTab, remove } = useFilterStore();
+  const { toggle, getSelectedByTab, remove, add } = useFilterStore();
 
   const [customStartTime, setCustomStartTime] = useState('');
   const [customEndTime, setCustomEndTime] = useState('');
+
+  const syncDirectWorkTime = useCallback(() => {
+    if (workTimeFilter !== '직접 선택') return;
+    const current = getSelectedByTab(tabId).filter((f) => f.item.group === 'workTime');
+
+    current.forEach((f) => remove(tabId, f.item.id));
+
+    if (customStartTime && customEndTime) {
+      const id = `workTime:${customStartTime}-${customEndTime}`;
+      const label = `${customStartTime}~${customEndTime}`;
+      add(tabId, { id, label, group: 'workTime' }, { group: 'workTime', groupLimit: 1 });
+    }
+  }, [workTimeFilter, customStartTime, customEndTime, tabId, getSelectedByTab, remove, add]);
+
+  useEffect(() => {
+    syncDirectWorkTime();
+  }, [customStartTime, customEndTime, workTimeFilter]);
 
   const handleWorkDaysTagClick: TagClickHandler = (workDay) => {
     toggle(

@@ -16,9 +16,9 @@ const Modal = ({ isOpen, onClose, title, children, footer }: ModalProps) => {
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       <div className="absolute inset-0 bg-black/40" onClick={onClose} />
       <div className="relative z-10 w-[320px] rounded-[10px] bg-white p-[16px] shadow-[0_8px_30px_rgba(0,0,0,0.12)]">
-        <div className="flex items-center">
-          {title ? <div className="text-header mb-[14px] font-semibold">{title}</div> : <div />}
-          <div className="flex flex-1 justify-end">
+        <div className="mb-[14px] flex items-center justify-between">
+          {title ? <div className="text-header font-semibold">{title}</div> : <div />}
+          <div className="flex justify-end">
             <button aria-label="close" onClick={onClose}>
               <ClosedIcon width={20} height={20} color="#6a6a6a" />
             </button>

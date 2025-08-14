@@ -12,7 +12,10 @@ const WorkLocation = () => {
   const { activeTab } = useTabContext();
   const tabId = activeTab as TabId;
   const [locationValue, setLocationValue] = useState<CascaderValue>({});
-  const { getSelectedByTab, toggle, clearTab, remove } = useFilterStore();
+  const getSelectedByTab = useFilterStore((s) => s.getSelectedByTab);
+  const toggle = useFilterStore((s) => s.toggle);
+  const clearTab = useFilterStore((s) => s.clearTab);
+  const remove = useFilterStore((s) => s.remove);
   const MAX_SELECTION = 10;
 
   const handleLocationChange = useCallback(

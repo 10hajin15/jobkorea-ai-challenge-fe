@@ -7,6 +7,7 @@ interface PKeyWord {
   excludeKeywords: string[];
   setIncludeKeywords: Dispatch<SetStateAction<string[]>>;
   setExcludeKeywords: Dispatch<SetStateAction<string[]>>;
+  onSave?: (include: string[], exclude: string[]) => void;
 }
 
 const KeyWord = ({
@@ -14,12 +15,13 @@ const KeyWord = ({
   excludeKeywords,
   setIncludeKeywords,
   setExcludeKeywords,
+  onSave = () => {},
 }: PKeyWord) => {
   const [open, setOpen] = useState(false);
   return (
     <div className="flex flex-col gap-[12px]">
-      <div className="flex gap-[8px]">
-        <div className="mb-[6px] flex w-[80px] items-center gap-[6px]">
+      <div className="flex h-[22px]">
+        <div className="flex w-[80px] items-center gap-[6px]">
           <span className="text-caption text-gray-2">포함</span>
           <div className="flex items-center">
             <span className="text-caption text-primary">{includeKeywords.length}</span>
@@ -38,8 +40,8 @@ const KeyWord = ({
           ))}
         </div>
       </div>
-      <div className="flex gap-[8px]">
-        <div className="mb-[6px] flex w-[80px] items-center gap-[6px]">
+      <div className="flex h-[22px]">
+        <div className="flex w-[80px] items-center gap-[6px]">
           <span className="text-caption text-gray-2">제외</span>
           <div className="flex items-center">
             <span className="text-caption text-primary">{excludeKeywords.length}</span>
@@ -75,6 +77,7 @@ const KeyWord = ({
         onSave={(inc, exc) => {
           setIncludeKeywords(inc);
           setExcludeKeywords(exc);
+          onSave(inc, exc);
         }}
       />
     </div>

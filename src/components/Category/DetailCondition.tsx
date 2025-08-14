@@ -184,6 +184,27 @@ const DetailCondition = () => {
           excludeKeywords={excludeKeywords}
           setIncludeKeywords={setIncludeKeywords}
           setExcludeKeywords={setExcludeKeywords}
+          onSave={(inc, exc) => {
+            getSelectedByTab(tabId)
+              .filter((f) => f.item.group === 'keywordInclude' || f.item.group === 'keywordExclude')
+              .forEach((f) => remove(tabId, f.item.id));
+
+            inc.forEach((kw) => {
+              add(
+                tabId,
+                { id: `keywordInclude:${kw}`, label: kw, group: 'keywordInclude' },
+                { group: 'keywordInclude', groupLimit: 1000 },
+              );
+            });
+
+            exc.forEach((kw) => {
+              add(
+                tabId,
+                { id: `keywordExclude:${kw}`, label: kw, group: 'keywordExclude' },
+                { group: 'keywordExclude', groupLimit: 1000 },
+              );
+            });
+          }}
         />
       </FilterContent>
     </>

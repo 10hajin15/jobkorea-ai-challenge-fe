@@ -49,7 +49,7 @@ const WorkLocation = () => {
   return (
     <div className="flex h-full min-h-0 flex-col">
       <div className="px-[30px] py-[14px]">
-        <SearchInput placeholder="지역명을 검색하세요." onSearch={handleSearch} />
+        <SearchInput placeholder="지역명을 검색하세요." onValueChange={handleSearch} />
       </div>
       <div className="min-h-0 flex-1">
         <Cascader

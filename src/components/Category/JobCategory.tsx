@@ -51,7 +51,7 @@ const JobCategory = () => {
   return (
     <div className="flex h-full min-h-0 flex-col">
       <div className="px-[30px] py-[14px]">
-        <SearchInput placeholder="업직종을 검색하세요." onSearch={handleSearch} />
+        <SearchInput placeholder="업직종을 검색하세요." onValueChange={handleSearch} />
       </div>
       <div className="min-h-0 flex-1">
         <Cascader

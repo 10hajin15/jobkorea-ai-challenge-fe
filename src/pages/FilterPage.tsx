@@ -16,9 +16,17 @@ const FilterPage = () => {
       case 1:
         return <JobCategory />;
       case 2:
-        return <WorkPeriod />;
+        return (
+          <div className="flex flex-col gap-[24px] px-[20px] py-[12px]">
+            <WorkPeriod />
+          </div>
+        );
       case 3:
-        return <DetailCondition />;
+        return (
+          <div className="flex flex-col gap-[24px] px-[20px] py-[12px]">
+            <DetailCondition />
+          </div>
+        );
       default:
         return null;
     }

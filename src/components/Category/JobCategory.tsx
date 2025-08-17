@@ -12,7 +12,7 @@ const JobCategory = () => {
   const { activeTab } = useTabContext();
   const tabId = activeTab as TabId;
   const [categoryValue, setCategoryValue] = useState<CascaderValue>({});
-  const getSelectedByTab = useFilterStore((s) => s.getSelectedByTab);
+  const byTab = useFilterStore((s) => s.byTab);
   const toggle = useFilterStore((s) => s.toggle);
   const clearTab = useFilterStore((s) => s.clearTab);
   const remove = useFilterStore((s) => s.remove);
@@ -43,7 +43,7 @@ const JobCategory = () => {
   };
 
   const handleRemove = (label: string) => {
-    const current = getSelectedByTab(tabId);
+    const current = byTab[tabId];
     const found = current.find((f) => f.item.label === label);
     if (found) remove(tabId, found.item.id);
   };
@@ -60,12 +60,12 @@ const JobCategory = () => {
           onChange={handleCategoryChange}
           placeholder={['대분류', '중분류']}
           maxDepth={2}
-          selectedLeafLabels={getSelectedByTab(tabId).map((f) => f.item.label)}
+          selectedLeafLabels={byTab[tabId].map((f) => f.item.label)}
         />
       </div>
-      {getSelectedByTab(tabId).length > 0 && (
+      {byTab[tabId].length > 0 && (
         <FilterChipBar
-          selectedFilters={getSelectedByTab(tabId).map((f) => f.item.label)}
+          selectedFilters={byTab[tabId].map((f) => f.item.label)}
           onReset={handleReset}
           onRemove={handleRemove}
         />

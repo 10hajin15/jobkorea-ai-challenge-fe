@@ -7,11 +7,13 @@ import FilterChipBar from '../common/FilterChipBar';
 import useFilterStore from '@/store/useFilterStore';
 import { useTabContext } from '@/components/common/Tab/TabContext';
 import type { TabId } from '@/types/filter';
+import SearchResult from '../common/SearchResult';
 
 const WorkLocation = () => {
   const { activeTab } = useTabContext();
   const tabId = activeTab as TabId;
   const [locationValue, setLocationValue] = useState<CascaderValue>({});
+  const [keyword, setKeyword] = useState('');
   const getSelectedByTab = useFilterStore((s) => s.getSelectedByTab);
   const toggle = useFilterStore((s) => s.toggle);
   const clearTab = useFilterStore((s) => s.clearTab);
@@ -33,7 +35,7 @@ const WorkLocation = () => {
   );
 
   const handleSearch = (value: string) => {
-    console.log('Search:', value);
+    setKeyword(value);
   };
 
   const handleReset = () => {
@@ -52,13 +54,17 @@ const WorkLocation = () => {
         <SearchInput placeholder="지역명을 검색하세요." onValueChange={handleSearch} />
       </div>
       <div className="min-h-0 flex-1">
-        <Cascader
-          options={cascaderData.locations}
-          value={locationValue}
-          onChange={handleLocationChange}
-          placeholder={['시/도', '시/군/구', '동/면']}
-          selectedLeafLabels={getSelectedByTab(tabId).map((f) => f.item.label)}
-        />
+        {keyword ? (
+          <SearchResult keyword={keyword} filterItems={getSelectedByTab(tabId)} />
+        ) : (
+          <Cascader
+            options={cascaderData.locations}
+            value={locationValue}
+            onChange={handleLocationChange}
+            placeholder={['시/도', '시/군/구', '동/면']}
+            selectedLeafLabels={getSelectedByTab(tabId).map((f) => f.item.label)}
+          />
+        )}
       </div>
       {getSelectedByTab(tabId).length > 0 && (
         <FilterChipBar

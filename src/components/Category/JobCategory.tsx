@@ -9,6 +9,7 @@ import { useTabContext } from '@/components/common/Tab/TabContext';
 import type { TabId } from '@/types/filter';
 import SearchResult from '../common/SearchResult';
 import { flattenLeafPaths } from '@/utils/cascader';
+import { useToast } from '@/hooks/useToast';
 
 const JobCategory = () => {
   const { activeTab } = useTabContext();
@@ -19,6 +20,7 @@ const JobCategory = () => {
   const toggle = useFilterStore((s) => s.toggle);
   const clearTab = useFilterStore((s) => s.clearTab);
   const remove = useFilterStore((s) => s.remove);
+  const { warning } = useToast();
   const MAX_SELECTION = 10;
 
   const handleCategoryChange = useCallback(
@@ -30,11 +32,15 @@ const JobCategory = () => {
       setCategoryValue(value);
 
       if (!isLeaf) return;
-      toggle(tabId, { id: lastOption.value, label }, { limit: MAX_SELECTION });
+
+      const success = toggle(tabId, { id: lastOption.value, label }, { limit: MAX_SELECTION });
+      if (!success) {
+        warning(`최대 ${MAX_SELECTION}개까지 선택할 수 있습니다.`);
+      }
 
       console.log('Category selected:', value, selectedOptions);
     },
-    [tabId, toggle],
+    [tabId, toggle, warning],
   );
 
   const handleSearch = (value: string) => {

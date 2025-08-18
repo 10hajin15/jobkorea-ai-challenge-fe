@@ -9,11 +9,13 @@ import KeyWord from '../common/KeyWord';
 import { useTabContext } from '@/components/common/Tab/TabContext';
 import type { TabId } from '@/types/filter';
 import MoneyInput from '../common/MoneyInput';
+import { useToast } from '@/hooks/useToast';
 
 const DetailCondition = () => {
   const { activeTab } = useTabContext();
   const tabId = activeTab as TabId;
   const { toggle, getSelectedByTab, add, remove } = useFilterStore();
+  const { warning } = useToast();
 
   const [age, setAge] = useState<number>(10);
   const includeKeywords = useMemo(
@@ -47,7 +49,7 @@ const DetailCondition = () => {
   };
 
   const handleClickWorkType = (tag: string) => {
-    toggle(
+    const success = toggle(
       tabId,
       { id: `employmentType:${tag}`, label: tag, group: 'employmentType' },
       {
@@ -55,12 +57,15 @@ const DetailCondition = () => {
         groupLimit: 7,
       },
     );
+    if (!success) {
+      warning('고용형태는 최대 7개까지 선택할 수 있습니다.');
+    }
   };
 
   const handleClickMoneyCondition = (tag: string) => {
     const selected = getSelectedByTab(tabId).find((f) => f.item.group === 'moneyCondition');
     const isDeselecting = selected && selected.item.label === tag;
-    toggle(
+    const success = toggle(
       tabId,
       { id: `money:${tag}`, label: tag, group: 'moneyCondition' },
       {
@@ -68,6 +73,9 @@ const DetailCondition = () => {
         groupLimit: 1,
       },
     );
+    if (!success && !isDeselecting) {
+      warning('급여조건은 하나만 선택할 수 있습니다.');
+    }
     if (isDeselecting) {
       setMoneyValue('');
     }
@@ -90,7 +98,7 @@ const DetailCondition = () => {
   }, [selectedMoneyMin, selectedMoneyCondition]);
 
   const handleClickGender = (tag: string) => {
-    toggle(
+    const success = toggle(
       tabId,
       { id: `gender:${tag}`, label: tag, group: 'gender' },
       {
@@ -98,6 +106,9 @@ const DetailCondition = () => {
         groupLimit: 1,
       },
     );
+    if (!success) {
+      warning('성별은 하나만 선택할 수 있습니다.');
+    }
   };
 
   return (

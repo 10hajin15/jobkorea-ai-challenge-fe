@@ -8,6 +8,7 @@ import useFilterStore from '@/store/useFilterStore';
 import { useTabContext } from '@/components/common/Tab/TabContext';
 import type { TabId } from '@/types/filter';
 import ModeSection from '../common/ModeSection';
+import { useToast } from '@/hooks/useToast';
 
 const WorkPeriod = () => {
   const [workDaysFilter, setWorkDaysFilter] = useState<FilterMode>('목록에서 선택');
@@ -16,6 +17,7 @@ const WorkPeriod = () => {
   const { activeTab } = useTabContext();
   const tabId = activeTab as TabId;
   const { toggle, getSelectedByTab, remove, add } = useFilterStore();
+  const { warning } = useToast();
 
   const [customStartTime, setCustomStartTime] = useState('');
   const [customEndTime, setCustomEndTime] = useState('');
@@ -38,23 +40,29 @@ const WorkPeriod = () => {
   }, [customStartTime, customEndTime, workTimeFilter]);
 
   const handleWorkDaysTagClick: TagClickHandler = (workDay) => {
-    toggle(
+    const success = toggle(
       tabId,
       { id: `workDays:${workDay}`, label: workDay, group: 'workDays' },
       workDaysFilter === '목록에서 선택'
         ? { group: 'workDays', groupLimit: 3 }
         : { group: 'workDays' },
     );
+    if (!success && workDaysFilter === '목록에서 선택') {
+      warning('근무요일은 최대 3개까지 선택할 수 있습니다.');
+    }
   };
 
   const handleWorkTimeTagClick: TagClickHandler = (workTime) => {
-    toggle(
+    const success = toggle(
       tabId,
       { id: `workTime:${workTime}`, label: workTime, group: 'workTime' },
       workTimeFilter === '목록에서 선택'
         ? { group: 'workTime', groupLimit: 3 }
         : { group: 'workTime' },
     );
+    if (!success && workTimeFilter === '목록에서 선택') {
+      warning('근무시간은 최대 3개까지 선택할 수 있습니다.');
+    }
   };
 
   return (
@@ -66,16 +74,19 @@ const WorkPeriod = () => {
       >
         <TagList
           items={WORK_PERIOD}
-          onTagClick={(period: string) =>
-            toggle(
+          onTagClick={(period: string) => {
+            const success = toggle(
               tabId,
               { id: `workPeriod:${period}`, label: period, group: 'workPeriod' },
               {
                 group: 'workPeriod',
                 groupLimit: 6,
               },
-            )
-          }
+            );
+            if (!success) {
+              warning('근무기간은 최대 6개까지 선택할 수 있습니다.');
+            }
+          }}
           activeItems={getSelectedByTab(tabId)
             .filter((f) => f.item.group === 'workPeriod')
             .map((f) => f.item.label)}

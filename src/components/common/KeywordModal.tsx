@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Modal from './Modal';
 import SearchInput from './SearchInput';
 import Chip from './Chip';
@@ -22,6 +22,10 @@ const KeywordModal = ({
   const [inputValue, setInputValue] = useState('');
   const [draftInclude, setDraftInclude] = useState<string[]>(includeKeywords);
   const [draftExclude, setDraftExclude] = useState<string[]>(excludeKeywords);
+  const includeScrollRef = useRef<HTMLDivElement | null>(null);
+  const excludeScrollRef = useRef<HTMLDivElement | null>(null);
+  const prevIncludeCountRef = useRef<number>(draftInclude.length);
+  const prevExcludeCountRef = useRef<number>(draftExclude.length);
 
   useEffect(() => {
     if (isOpen) {
@@ -37,13 +41,33 @@ const KeywordModal = ({
     if (!value) return;
     if (mode === 'include') {
       if (draftInclude.length >= 20) return;
-      setDraftInclude((prev) => (prev.includes(value) ? prev : [value, ...prev]));
+      setDraftInclude((prev) => (prev.includes(value) ? prev : [...prev, value]));
     } else {
       if (draftExclude.length >= 100) return;
-      setDraftExclude((prev) => (prev.includes(value) ? prev : [value, ...prev]));
+      setDraftExclude((prev) => (prev.includes(value) ? prev : [...prev, value]));
     }
     setInputValue('');
   };
+
+  useEffect(() => {
+    const container = includeScrollRef.current;
+    if (!container) return;
+    const didIncrease = prevIncludeCountRef.current < draftInclude.length;
+    if (didIncrease) {
+      container.scrollTo({ left: container.scrollWidth, behavior: 'smooth' });
+    }
+    prevIncludeCountRef.current = draftInclude.length;
+  }, [draftInclude]);
+
+  useEffect(() => {
+    const container = excludeScrollRef.current;
+    if (!container) return;
+    const didIncrease = prevExcludeCountRef.current < draftExclude.length;
+    if (didIncrease) {
+      container.scrollTo({ left: container.scrollWidth, behavior: 'smooth' });
+    }
+    prevExcludeCountRef.current = draftExclude.length;
+  }, [draftExclude]);
 
   const footer = (
     <button
@@ -116,7 +140,10 @@ const KeywordModal = ({
               <span className="text-caption text-gray-3">/20</span>
             </div>
           </div>
-          <div className="scrollbar-hide flex flex-1 items-center gap-[8px] overflow-x-auto">
+          <div
+            ref={includeScrollRef}
+            className="scrollbar-hide flex flex-1 items-center gap-[8px] overflow-x-auto"
+          >
             {draftInclude.map((kw, i) => (
               <div key={`include-${kw}-${i}`} className="shrink-0">
                 <Chip
@@ -136,7 +163,10 @@ const KeywordModal = ({
               <span className="text-caption text-gray-3">/100</span>
             </div>
           </div>
-          <div className="scrollbar-hide flex flex-1 flex-nowrap items-center gap-[8px] overflow-x-auto">
+          <div
+            ref={excludeScrollRef}
+            className="scrollbar-hide flex flex-1 flex-nowrap items-center gap-[8px] overflow-x-auto"
+          >
             {draftExclude.map((kw, i) => (
               <div key={`exclude-${kw}-${i}`} className="shrink-0">
                 <Chip

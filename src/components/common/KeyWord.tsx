@@ -1,4 +1,4 @@
-import { useState, type Dispatch, type SetStateAction } from 'react';
+import { useEffect, useRef, useState, type Dispatch, type SetStateAction } from 'react';
 import Chip from './Chip';
 import KeywordModal from './KeywordModal';
 
@@ -18,6 +18,30 @@ const KeyWord = ({
   onSave = () => {},
 }: PKeyWord) => {
   const [open, setOpen] = useState(false);
+  const includeScrollRef = useRef<HTMLDivElement | null>(null);
+  const excludeScrollRef = useRef<HTMLDivElement | null>(null);
+  const prevIncludeCountRef = useRef<number>(includeKeywords.length);
+  const prevExcludeCountRef = useRef<number>(excludeKeywords.length);
+
+  useEffect(() => {
+    const container = includeScrollRef.current;
+    if (!container) return;
+    const didIncrease = prevIncludeCountRef.current < includeKeywords.length;
+    if (didIncrease) {
+      container.scrollTo({ left: container.scrollWidth, behavior: 'smooth' });
+    }
+    prevIncludeCountRef.current = includeKeywords.length;
+  }, [includeKeywords]);
+
+  useEffect(() => {
+    const container = excludeScrollRef.current;
+    if (!container) return;
+    const didIncrease = prevExcludeCountRef.current < excludeKeywords.length;
+    if (didIncrease) {
+      container.scrollTo({ left: container.scrollWidth, behavior: 'smooth' });
+    }
+    prevExcludeCountRef.current = excludeKeywords.length;
+  }, [excludeKeywords]);
   return (
     <div className="flex flex-col gap-[12px]">
       <div className="flex">
@@ -28,7 +52,10 @@ const KeyWord = ({
             <span className="text-caption text-gray-3">/20</span>
           </div>
         </div>
-        <div className="scrollbar-hide flex flex-1 flex-nowrap items-center gap-[8px] overflow-x-auto">
+        <div
+          ref={includeScrollRef}
+          className="scrollbar-hide flex flex-1 flex-nowrap items-center gap-[8px] overflow-x-auto"
+        >
           {includeKeywords.map((kw, i) => (
             <div key={`include-${kw}-${i}`} className="shrink-0">
               <Chip
@@ -48,7 +75,10 @@ const KeyWord = ({
             <span className="text-caption text-gray-3">/100</span>
           </div>
         </div>
-        <div className="scrollbar-hide flex flex-1 flex-nowrap items-center gap-[8px] overflow-x-auto">
+        <div
+          ref={excludeScrollRef}
+          className="scrollbar-hide flex flex-1 flex-nowrap items-center gap-[8px] overflow-x-auto"
+        >
           {excludeKeywords.map((kw, i) => (
             <div key={`exclude-${kw}-${i}`} className="shrink-0">
               <Chip

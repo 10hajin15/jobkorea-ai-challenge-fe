@@ -54,7 +54,12 @@ const useFilterStore = create<FilterStore>((set, get, store) => ({
         }
       }
 
-      const newItem: SelectedFilter = { key: makeKey(tabId, item.id), tabId, item };
+      const newItem: SelectedFilter = {
+        key: makeKey(tabId, item.id),
+        tabId,
+        item,
+        addedAt: Date.now(),
+      };
       return {
         byTab: { ...state.byTab, [tabId]: [...next, newItem] },
       };

@@ -1,5 +1,6 @@
 import Chip from './Chip';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useEffect, useRef } from 'react';
 
 interface FilterChipBarProps {
   selectedFilters: string[];
@@ -9,6 +10,20 @@ interface FilterChipBarProps {
 }
 
 const FilterChipBar = ({ selectedFilters, onReset, onRemove, limit = 10 }: FilterChipBarProps) => {
+  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
+  const previousCountRef = useRef<number>(selectedFilters.length);
+
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    const didIncrease = previousCountRef.current < selectedFilters.length;
+    if (didIncrease) {
+      container.scrollTo({ left: container.scrollWidth, behavior: 'smooth' });
+    }
+    previousCountRef.current = selectedFilters.length;
+  }, [selectedFilters]);
+
   return (
     <div className="flex h-[82px] flex-col justify-between rounded-t-[8px] bg-white px-[20px] py-[14px] shadow-[0_-6px_12px_rgba(0,0,0,0.07)]">
       <div className="text-caption flex items-center justify-between">
@@ -20,7 +35,10 @@ const FilterChipBar = ({ selectedFilters, onReset, onRemove, limit = 10 }: Filte
           초기화
         </div>
       </div>
-      <div className="scrollbar-hide flex flex-nowrap gap-[8px] overflow-x-auto">
+      <div
+        ref={scrollContainerRef}
+        className="scrollbar-hide flex flex-nowrap gap-[8px] overflow-x-auto"
+      >
         <AnimatePresence initial={false}>
           {selectedFilters.map((filter) => (
             <motion.div

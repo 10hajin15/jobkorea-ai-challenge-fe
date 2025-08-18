@@ -14,6 +14,7 @@ export interface SelectedFilter {
   key: string; // `${tabId}|${id}`
   tabId: TabId;
   item: FilterItem;
+  addedAt: number;
 }
 
 export interface FilterState {

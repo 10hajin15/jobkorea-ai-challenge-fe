@@ -16,8 +16,20 @@ const DetailCondition = () => {
   const { toggle, getSelectedByTab, add, remove } = useFilterStore();
 
   const [age, setAge] = useState<number>(10);
-  const [includeKeywords, setIncludeKeywords] = useState<string[]>([]);
-  const [excludeKeywords, setExcludeKeywords] = useState<string[]>([]);
+  const includeKeywords = useMemo(
+    () =>
+      getSelectedByTab(tabId)
+        .filter((f) => f.item.group === 'keywordInclude')
+        .map((f) => f.item.label),
+    [tabId, getSelectedByTab(tabId)],
+  );
+  const excludeKeywords = useMemo(
+    () =>
+      getSelectedByTab(tabId)
+        .filter((f) => f.item.group === 'keywordExclude')
+        .map((f) => f.item.label),
+    [tabId, getSelectedByTab(tabId)],
+  );
   const [moneyValue, setMoneyValue] = useState<string>('');
 
   const AGE_MIN = 10;
@@ -182,8 +194,12 @@ const DetailCondition = () => {
         <KeyWord
           includeKeywords={includeKeywords}
           excludeKeywords={excludeKeywords}
-          setIncludeKeywords={setIncludeKeywords}
-          setExcludeKeywords={setExcludeKeywords}
+          onRemoveInclude={(kw) => {
+            remove(tabId, `keywordInclude:${kw}`);
+          }}
+          onRemoveExclude={(kw) => {
+            remove(tabId, `keywordExclude:${kw}`);
+          }}
           onSave={(inc, exc) => {
             getSelectedByTab(tabId)
               .filter((f) => f.item.group === 'keywordInclude' || f.item.group === 'keywordExclude')
@@ -196,7 +212,6 @@ const DetailCondition = () => {
                 { group: 'keywordInclude', groupLimit: 1000 },
               );
             });
-
             exc.forEach((kw) => {
               add(
                 tabId,

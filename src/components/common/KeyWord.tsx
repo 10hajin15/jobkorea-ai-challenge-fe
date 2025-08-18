@@ -5,8 +5,10 @@ import KeywordModal from './KeywordModal';
 interface PKeyWord {
   includeKeywords: string[];
   excludeKeywords: string[];
-  setIncludeKeywords: Dispatch<SetStateAction<string[]>>;
-  setExcludeKeywords: Dispatch<SetStateAction<string[]>>;
+  setIncludeKeywords?: Dispatch<SetStateAction<string[]>>;
+  setExcludeKeywords?: Dispatch<SetStateAction<string[]>>;
+  onRemoveInclude?: (keyword: string) => void;
+  onRemoveExclude?: (keyword: string) => void;
   onSave?: (include: string[], exclude: string[]) => void;
 }
 
@@ -15,6 +17,8 @@ const KeyWord = ({
   excludeKeywords,
   setIncludeKeywords,
   setExcludeKeywords,
+  onRemoveInclude,
+  onRemoveExclude,
   onSave = () => {},
 }: PKeyWord) => {
   const [open, setOpen] = useState(false);
@@ -61,7 +65,13 @@ const KeyWord = ({
               <Chip
                 label={kw}
                 color="primary"
-                onRemove={() => setIncludeKeywords((prev) => prev.filter((k) => k !== kw))}
+                onRemove={() => {
+                  if (onRemoveInclude) {
+                    onRemoveInclude(kw);
+                  } else if (setIncludeKeywords) {
+                    setIncludeKeywords((prev) => prev.filter((k) => k !== kw));
+                  }
+                }}
               />
             </div>
           ))}
@@ -85,7 +95,13 @@ const KeyWord = ({
                 key={`exclude-${kw}`}
                 label={kw}
                 color="gray"
-                onRemove={() => setExcludeKeywords((prev) => prev.filter((k) => k !== kw))}
+                onRemove={() => {
+                  if (onRemoveExclude) {
+                    onRemoveExclude(kw);
+                  } else if (setExcludeKeywords) {
+                    setExcludeKeywords((prev) => prev.filter((k) => k !== kw));
+                  }
+                }}
               />
             </div>
           ))}
@@ -105,8 +121,8 @@ const KeyWord = ({
         includeKeywords={includeKeywords}
         excludeKeywords={excludeKeywords}
         onSave={(inc, exc) => {
-          setIncludeKeywords(inc);
-          setExcludeKeywords(exc);
+          setIncludeKeywords?.(inc);
+          setExcludeKeywords?.(exc);
           onSave(inc, exc);
         }}
       />

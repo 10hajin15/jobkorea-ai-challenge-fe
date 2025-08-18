@@ -37,8 +37,6 @@ const JobCategory = () => {
       if (!success) {
         warning(`최대 ${MAX_SELECTION}개까지 선택할 수 있습니다.`);
       }
-
-      console.log('Category selected:', value, selectedOptions);
     },
     [tabId, toggle, warning],
   );

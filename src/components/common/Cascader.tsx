@@ -7,7 +7,7 @@ const Cascader = ({
   value = {},
   onChange = () => {},
   placeholder = [''],
-  maxDepth = 3,
+  maxDepth,
   selectedLeafLabels = [],
 }: CascaderProps) => {
   const getSelectedOption = (depth: number): CascaderOption | null => {

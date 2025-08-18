@@ -13,6 +13,6 @@ export interface CascaderProps {
   value?: CascaderValue;
   onChange?: (value: CascaderValue, selectedOptions: CascaderOption[]) => void;
   placeholder?: string[];
-  maxDepth?: number;
+  maxDepth: number;
   selectedLeafLabels?: string[];
 }

@@ -1,17 +1,20 @@
 import Cascader from '@/components/common/Cascader';
 import cascaderData from '@/fixtures/cascader-data.json';
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import type { CascaderValue, CascaderOption } from '@/types/cascader';
 import SearchInput from '../common/SearchInput';
 import FilterChipBar from '../common/FilterChipBar';
 import useFilterStore from '@/store/useFilterStore';
 import { useTabContext } from '@/components/common/Tab/TabContext';
 import type { TabId } from '@/types/filter';
+import SearchResult from '../common/SearchResult';
+import { flattenLeafPaths } from '@/utils/cascader';
 
 const JobCategory = () => {
   const { activeTab } = useTabContext();
   const tabId = activeTab as TabId;
   const [categoryValue, setCategoryValue] = useState<CascaderValue>({});
+  const [keyword, setKeyword] = useState('');
   const byTab = useFilterStore((s) => s.byTab);
   const toggle = useFilterStore((s) => s.toggle);
   const clearTab = useFilterStore((s) => s.clearTab);
@@ -35,8 +38,18 @@ const JobCategory = () => {
   );
 
   const handleSearch = (value: string) => {
-    console.log('Search:', value);
+    setKeyword(value);
   };
+
+  const searchResults = useMemo(() => {
+    const q = keyword.trim();
+    if (!q) return [] as { id: string; fullLabel: string; leafLabel: string }[];
+    const qLower = q.toLowerCase();
+    const flattened = flattenLeafPaths(cascaderData.categories);
+    return flattened.filter((item) =>
+      item.pathLabels.some((lbl) => lbl.toLowerCase().includes(qLower)),
+    );
+  }, [keyword]);
 
   const handleReset = () => {
     clearTab(tabId);
@@ -49,19 +62,23 @@ const JobCategory = () => {
   };
 
   return (
-    <div className="flex h-full min-h-0 flex-col">
+    <div className="flex h-full flex-col">
       <div className="px-[30px] py-[14px]">
         <SearchInput placeholder="업직종을 검색하세요." onValueChange={handleSearch} />
       </div>
       <div className="min-h-0 flex-1">
-        <Cascader
-          options={cascaderData.categories}
-          value={categoryValue}
-          onChange={handleCategoryChange}
-          placeholder={['대분류', '중분류']}
-          maxDepth={2}
-          selectedLeafLabels={byTab[tabId].map((f) => f.item.label)}
-        />
+        {keyword ? (
+          <SearchResult keyword={keyword} results={searchResults} />
+        ) : (
+          <Cascader
+            options={cascaderData.categories}
+            value={categoryValue}
+            onChange={handleCategoryChange}
+            placeholder={['대분류', '중분류']}
+            maxDepth={2}
+            selectedLeafLabels={byTab[tabId].map((f) => f.item.label)}
+          />
+        )}
       </div>
       {byTab[tabId].length > 0 && (
         <FilterChipBar

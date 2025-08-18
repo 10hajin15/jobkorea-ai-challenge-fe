@@ -1,27 +1,49 @@
-import type { SelectedFilter } from '@/types/filter';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useTabContext } from '@/components/common/Tab/TabContext';
+import type { TabId } from '@/types/filter';
+import useFilterStore from '@/store/useFilterStore';
+
+interface SearchResultItem {
+  id: string;
+  fullLabel: string;
+  leafLabel: string;
+}
 
 interface SearchResultProps {
   keyword: string;
-  filterItems: SelectedFilter[];
+  results: SearchResultItem[];
 }
 
-const SearchResult = ({ filterItems }: SearchResultProps) => {
+const SearchResult = ({ results }: SearchResultProps) => {
+  const { activeTab } = useTabContext();
+  const tabId = activeTab as TabId;
+  const toggle = useFilterStore((s) => s.toggle);
+  const isSelectedFn = useFilterStore((s) => s.isSelected);
+
   return (
-    <div className="border-gray-border scrollbar-hide h-full overflow-y-auto border-t">
+    <div className="border-gray-border scrollbar-hide relative h-full overflow-y-auto border-t">
       <AnimatePresence initial={false}>
-        {filterItems.map((filterItem) => {
+        {results.map((item) => {
+          const isSelected = isSelectedFn(tabId, item.id);
           return (
             <motion.label
-              htmlFor={filterItem.item.id}
-              key={filterItem.item.id}
+              htmlFor={item.id}
+              key={item.id}
               className="has-[:checked]:bg-primary-light-2 flex h-[50px] cursor-pointer items-center gap-[10px] px-[20px]"
               initial={{ opacity: 0, y: 4 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -4 }}
               transition={{ duration: 0.15, ease: 'easeOut' }}
             >
-              <input id={filterItem.item.id} type="checkbox" className="peer sr-only" />
+              <input
+                id={item.id}
+                type="checkbox"
+                className="peer sr-only"
+                checked={isSelected}
+                onChange={() =>
+                  toggle(tabId, { id: item.id, label: item.leafLabel }, { limit: 20 })
+                }
+              />
               <div className="border-gray-3 peer-checked:border-primary peer-checked:bg-primary flex h-[18px] w-[18px] items-center justify-center rounded border peer-checked:[&>svg]:block">
                 <svg
                   width="12"
@@ -42,7 +64,7 @@ const SearchResult = ({ filterItems }: SearchResultProps) => {
                 </svg>
               </div>
               <div className="text-body peer-checked:text-primary peer-checked:font-semibold">
-                {filterItem.item.label}
+                {item.fullLabel}
               </div>
             </motion.label>
           );

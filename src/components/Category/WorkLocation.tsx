@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import Cascader from '../common/Cascader';
 import type { CascaderValue, CascaderOption } from '@/types/cascader';
 import cascaderData from '@/fixtures/cascader-data.json';
@@ -8,6 +8,7 @@ import useFilterStore from '@/store/useFilterStore';
 import { useTabContext } from '@/components/common/Tab/TabContext';
 import type { TabId } from '@/types/filter';
 import SearchResult from '../common/SearchResult';
+import { flattenLeafPaths } from '@/utils/cascader';
 
 const WorkLocation = () => {
   const { activeTab } = useTabContext();
@@ -38,6 +39,16 @@ const WorkLocation = () => {
     setKeyword(value);
   };
 
+  const searchResults = useMemo(() => {
+    const q = keyword.trim();
+    if (!q) return [] as { id: string; fullLabel: string; leafLabel: string }[];
+    const qLower = q.toLowerCase();
+    const flattened = flattenLeafPaths(cascaderData.locations);
+    return flattened.filter((item) =>
+      item.pathLabels.some((lbl) => lbl.toLowerCase().includes(qLower)),
+    );
+  }, [keyword]);
+
   const handleReset = () => {
     clearTab(tabId);
   };
@@ -49,19 +60,20 @@ const WorkLocation = () => {
   };
 
   return (
-    <div className="flex h-full min-h-0 flex-col">
+    <div className="flex h-full flex-col">
       <div className="px-[30px] py-[14px]">
         <SearchInput placeholder="지역명을 검색하세요." onValueChange={handleSearch} />
       </div>
-      <div className="min-h-0 flex-1">
+      <div className="min-h-0 flex-1 overflow-hidden">
         {keyword ? (
-          <SearchResult keyword={keyword} filterItems={byTab[tabId]} />
+          <SearchResult keyword={keyword} results={searchResults} />
         ) : (
           <Cascader
             options={cascaderData.locations}
             value={locationValue}
             onChange={handleLocationChange}
             placeholder={['시/도', '시/군/구', '동/면']}
+            maxDepth={3}
             selectedLeafLabels={byTab[tabId].map((f) => f.item.label)}
           />
         )}

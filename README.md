@@ -18,6 +18,10 @@ React + TypeScript + Vite 기반의 알바몬 검색조건설정(모바일) UI �
 - UI/UX 설계: [UI/UX 설계](https://palm-flax-489.notion.site/UI-UX-25399198aab280aa8cdcf933f5aa405e?source=copy_link)
 - AI IDE 챗로그: [AI IDE 챗로그](https://palm-flax-489.notion.site/AI-IDE-25399198aab280e7afa8f0ac21114e44?source=copy_link)
 
+### 개발
+
+- 개발 일지: [개발 일지](https://palm-flax-489.notion.site/devlog?v=24d99198aab2801a822c000c8b8cddc5&source=copy_link)
+
 ## 기술 스택
 
 - React 19, TypeScript, Vite

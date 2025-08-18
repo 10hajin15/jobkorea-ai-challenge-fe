@@ -1,4 +1,5 @@
 import Chip from './Chip';
+import { AnimatePresence, motion } from 'framer-motion';
 
 interface FilterChipBarProps {
   selectedFilters: string[];
@@ -20,9 +21,20 @@ const FilterChipBar = ({ selectedFilters, onReset, onRemove, limit = 10 }: Filte
         </div>
       </div>
       <div className="scrollbar-hide flex flex-nowrap gap-[8px] overflow-x-auto">
-        {selectedFilters.map((filter) => (
-          <Chip key={filter} label={filter} color="primary" onRemove={() => onRemove(filter)} />
-        ))}
+        <AnimatePresence initial={false}>
+          {selectedFilters.map((filter) => (
+            <motion.div
+              key={filter}
+              layout
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.2, ease: 'easeOut' }}
+            >
+              <Chip label={filter} color="primary" onRemove={() => onRemove(filter)} />
+            </motion.div>
+          ))}
+        </AnimatePresence>
       </div>
     </div>
   );

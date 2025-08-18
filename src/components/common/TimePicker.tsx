@@ -1,4 +1,5 @@
 import { useMemo, useRef, useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 
 export interface TimePickerProps {
   value?: string;
@@ -93,24 +94,30 @@ const TimePicker = ({
         </div>
       </button>
 
-      {isOpen && (
-        <div
-          className={`border-gray-border absolute z-10 max-h-[220px] w-full overflow-auto rounded-[6px] border bg-white shadow-md ${
-            menuPlacement === 'bottom' ? 'top-full mt-[6px]' : 'bottom-full mb-[6px]'
-          }`}
-        >
-          {options.map((opt) => (
-            <button
-              key={opt}
-              type="button"
-              className="hover:bg-gray-5 text-body text-gray-1 w-full px-[12px] py-[10px] text-left"
-              onClick={() => selectValue(opt)}
-            >
-              {opt}
-            </button>
-          ))}
-        </div>
-      )}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            className={`border-gray-border absolute z-10 max-h-[220px] w-full overflow-auto rounded-[6px] border bg-white shadow-md ${
+              menuPlacement === 'bottom' ? 'top-full mt-[6px]' : 'bottom-full mb-[6px]'
+            }`}
+            initial={{ opacity: 0, y: menuPlacement === 'bottom' ? 6 : -6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: menuPlacement === 'bottom' ? 6 : -6 }}
+            transition={{ duration: 0.15, ease: 'easeOut' }}
+          >
+            {options.map((opt) => (
+              <button
+                key={opt}
+                type="button"
+                className="hover:bg-gray-5 text-body text-gray-1 w-full px-[12px] py-[10px] text-left"
+                onClick={() => selectValue(opt)}
+              >
+                {opt}
+              </button>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

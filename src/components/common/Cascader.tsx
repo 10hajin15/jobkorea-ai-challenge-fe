@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { motion } from 'framer-motion';
 import type { CascaderOption, CascaderValue, CascaderProps } from '@/types/cascader';
 
 const Cascader = ({
@@ -85,7 +86,7 @@ const Cascader = ({
             <div className="scrollbar-hide flex-1 overflow-y-auto">
               {shouldShowOptions &&
                 optionsAtDepth.map((option) => (
-                  <div
+                  <motion.div
                     key={option.value}
                     className={`text-body flex h-[42px] w-full cursor-pointer items-center px-[20px] transition-colors ${getDepthStyle(
                       depth,
@@ -93,9 +94,12 @@ const Cascader = ({
                       option,
                     )}`}
                     onClick={() => handleOptionSelect(option, depth)}
+                    whileHover={{ x: 2 }}
+                    whileTap={{ scale: 0.98 }}
+                    transition={{ duration: 0.12, ease: 'easeOut' }}
                   >
                     {option.label}
-                  </div>
+                  </motion.div>
                 ))}
             </div>
           </div>

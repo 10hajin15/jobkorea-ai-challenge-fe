@@ -1,5 +1,6 @@
 import Chip from './Chip';
 import useFilterStore from '@/store/useFilterStore';
+import { AnimatePresence, motion } from 'framer-motion';
 
 const SelectedFilters = () => {
   const remove = useFilterStore((s) => s.remove);
@@ -9,9 +10,20 @@ const SelectedFilters = () => {
   return (
     <div className="bg-gray-4 flex h-[72px] flex-col p-[10px]">
       <div className="scrollbar-hide flex flex-1 flex-wrap gap-[8px] overflow-y-auto">
-        {all.map((f) => (
-          <Chip key={f.key} label={f.item.label} onRemove={() => remove(f.tabId, f.item.id)} />
-        ))}
+        <AnimatePresence initial={false}>
+          {all.map((f) => (
+            <motion.div
+              key={f.key}
+              layout
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              transition={{ duration: 0.2, ease: 'easeOut' }}
+            >
+              <Chip label={f.item.label} onRemove={() => remove(f.tabId, f.item.id)} />
+            </motion.div>
+          ))}
+        </AnimatePresence>
       </div>
     </div>
   );

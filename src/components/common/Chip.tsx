@@ -1,5 +1,6 @@
 import ClosedIcon from '@/components/icons/ClosedIcon';
 import type { ChipProps } from '@/types/chip';
+import { motion } from 'framer-motion';
 
 const COLOR_CLASS = {
   primary: 'bg-primary-light-2 text-primary border border-primary-light',
@@ -13,19 +14,30 @@ const REMOVE_ICON_COLOR_CLASS = {
 
 const Chip = ({ label, color = 'gray', onRemove }: ChipProps) => {
   return (
-    <div
+    <motion.div
       className={`${COLOR_CLASS[color]} inline-flex h-[22px] shrink-0 items-center gap-[6px] rounded-[4px] px-[10px] whitespace-nowrap`}
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
+      transition={{ duration: 0.15, ease: 'easeOut' }}
     >
       <span className="text-caption leading-[12px] whitespace-nowrap">{label}</span>
-      <div onClick={onRemove} className="flex items-center justify-center">
+      <button
+        type="button"
+        onClick={(e) => {
+          e.stopPropagation();
+          onRemove?.();
+        }}
+        aria-label="remove"
+        className="flex items-center justify-center"
+      >
         <ClosedIcon
           className="cursor-pointer"
           color={REMOVE_ICON_COLOR_CLASS[color]}
           width={12}
           height={12}
         />
-      </div>
-    </div>
+      </button>
+    </motion.div>
   );
 };
 

@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from 'react';
 import Cascader from '../common/Cascader';
 import type { CascaderValue, CascaderOption } from '@/types/cascader';
-import cascaderData from '@/fixtures/cascader-data.json';
+import area from '@/fixtures/area.json';
 import SearchInput from '../common/SearchInput';
 import FilterChipBar from '../common/FilterChipBar';
 import useFilterStore from '@/store/useFilterStore';
@@ -45,15 +45,25 @@ const WorkLocation = () => {
     setKeyword(value);
   };
 
+  const cascaderOptions = useMemo(() => {
+    return [
+      {
+        label: area.name,
+        value: area.name,
+        children: area.collection.map((gu) => ({ label: gu, value: gu })),
+      },
+    ] as CascaderOption[];
+  }, []);
+
   const searchResults = useMemo(() => {
     const q = keyword.trim();
     if (!q) return [] as { id: string; fullLabel: string; leafLabel: string }[];
     const qLower = q.toLowerCase();
-    const flattened = flattenLeafPaths(cascaderData.locations);
+    const flattened = flattenLeafPaths(cascaderOptions);
     return flattened.filter((item) =>
       item.pathLabels.some((lbl) => lbl.toLowerCase().includes(qLower)),
     );
-  }, [keyword]);
+  }, [keyword, cascaderOptions]);
 
   const handleReset = () => {
     clearTab(tabId);
@@ -75,11 +85,11 @@ const WorkLocation = () => {
           <SearchResult keyword={keyword} results={searchResults} />
         ) : (
           <Cascader
-            options={cascaderData.locations}
+            options={cascaderOptions}
             value={locationValue}
             onChange={handleLocationChange}
-            placeholder={['시/도', '시/군/구', '동/면']}
-            maxDepth={3}
+            placeholder={['시/도', '시/군/구']}
+            maxDepth={2}
             selectedLeafLabels={byTab[tabId].map((f) => f.item.label)}
           />
         )}

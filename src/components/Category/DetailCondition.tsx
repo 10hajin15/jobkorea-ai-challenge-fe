@@ -1,6 +1,7 @@
 import FilterContent from '@/components/layout/FilterContentLayout';
 import TagList from '../common/TagList';
 import { MONEY_CONDITION, WORK_TYPE } from '@/constants/detail';
+import condition from '@/fixtures/condition.json';
 import { useEffect, useMemo, useState } from 'react';
 import ToggleButton from '../common/ToggleButton';
 import useFilterStore from '@/store/useFilterStore';
@@ -48,17 +49,19 @@ const DetailCondition = () => {
     }
   };
 
+  const EMPLOYMENT_MAX = condition.employmentType.maxCount ?? 7;
+
   const handleClickWorkType = (tag: string) => {
     const success = toggle(
       tabId,
       { id: `employmentType:${tag}`, label: tag, group: 'employmentType' },
       {
         group: 'employmentType',
-        groupLimit: 7,
+        groupLimit: EMPLOYMENT_MAX,
       },
     );
     if (!success) {
-      warning('고용형태는 최대 7개까지 선택할 수 있습니다.');
+      warning(`고용형태는 최대 ${EMPLOYMENT_MAX}개까지 선택할 수 있습니다.`);
     }
   };
 
@@ -116,7 +119,7 @@ const DetailCondition = () => {
       <FilterContent
         title="고용형태"
         count={getSelectedByTab(tabId).filter((f) => f.item.group === 'employmentType').length}
-        total={7}
+        total={EMPLOYMENT_MAX}
       >
         <TagList
           items={WORK_TYPE}

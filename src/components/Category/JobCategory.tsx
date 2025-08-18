@@ -1,5 +1,5 @@
 import Cascader from '@/components/common/Cascader';
-import cascaderData from '@/fixtures/cascader-data.json';
+import job from '@/fixtures/job.json';
 import { useCallback, useMemo, useState } from 'react';
 import type { CascaderValue, CascaderOption } from '@/types/cascader';
 import SearchInput from '../common/SearchInput';
@@ -47,15 +47,32 @@ const JobCategory = () => {
     setKeyword(value);
   };
 
+  const cascaderOptions = useMemo(() => {
+    if (Array.isArray(job)) {
+      return job.map((cat) => ({
+        label: cat.name,
+        value: cat.name,
+        children: (cat.collection ?? []).map((child: string) => ({ label: child, value: child })),
+      })) as CascaderOption[];
+    }
+    return [
+      {
+        label: job.name,
+        value: job.name,
+        children: (job.collection ?? []).map((child: string) => ({ label: child, value: child })),
+      },
+    ] as CascaderOption[];
+  }, []);
+
   const searchResults = useMemo(() => {
     const q = keyword.trim();
     if (!q) return [] as { id: string; fullLabel: string; leafLabel: string }[];
     const qLower = q.toLowerCase();
-    const flattened = flattenLeafPaths(cascaderData.categories);
+    const flattened = flattenLeafPaths(cascaderOptions);
     return flattened.filter((item) =>
       item.pathLabels.some((lbl) => lbl.toLowerCase().includes(qLower)),
     );
-  }, [keyword]);
+  }, [keyword, cascaderOptions]);
 
   const handleReset = () => {
     clearTab(tabId);
@@ -77,10 +94,10 @@ const JobCategory = () => {
           <SearchResult keyword={keyword} results={searchResults} />
         ) : (
           <Cascader
-            options={cascaderData.categories}
+            options={cascaderOptions}
             value={categoryValue}
             onChange={handleCategoryChange}
-            placeholder={['대분류', '중분류']}
+            placeholder={['대분류', '업직종']}
             maxDepth={2}
             selectedLeafLabels={byTab[tabId].map((f) => f.item.label)}
           />

@@ -1,6 +1,5 @@
 import { create } from 'zustand';
 import type { FilterItem, FilterState, SelectedFilter, TabId } from '@/types/filter';
-import { useToast } from '@/hooks/useToast';
 
 type ToggleOptions = { limit?: number; group?: string; groupLimit?: number };
 

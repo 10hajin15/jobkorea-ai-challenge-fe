@@ -131,7 +131,7 @@ npm run dev
 
 | 근무지역 | 업직종 | 근무기간 | 상세조건 |
 | -------- | ------ | -------- | -------- |
-|          |        |          |
+|<img src="https://github.com/10hajin15/jobkorea-ai-challenge-fe/blob/main/readme/%EA%B7%BC%EB%AC%B4%EC%A7%80%EC%97%AD.png" />|<img src="https://github.com/10hajin15/jobkorea-ai-challenge-fe/blob/main/readme/%EC%97%85%EC%A7%81%EC%A2%85.png" />|<img src="https://github.com/10hajin15/jobkorea-ai-challenge-fe/blob/main/readme/%EA%B7%BC%EB%AC%B4%EA%B8%B0%EA%B0%84.png" />|<img src="https://github.com/10hajin15/jobkorea-ai-challenge-fe/blob/main/readme/%EC%83%81%EC%84%B8%EC%A1%B0%EA%B1%B4.png" />|
 
 - 탭 네비게이션: 근무지역 / 업직종 / 근무기간 / 상세조건
 - 상단 선택 칩 영역: 모든 탭의 선택 항목을 통합 표시/개별 삭제

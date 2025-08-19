@@ -1,12 +1,13 @@
 ## JobKorea AI Challenge FE
 
-React + TypeScript + Vite 기반의 알바몬 검색조건설정(모바일) UI 구현 프로젝트입니다.
+알바몬 검색조건설정 모바일 페이지 UI 구현한 프로젝트입니다.
 
-- 참고 링크: [알바몬 검색조건설정(모바일)](https://m.albamon.com/jobs/search/detail-conditions)
+> 참고 링크: [AI Challenge 과제 설명](https://xg18kywe.ninehire.site/job_posting/u3mVklkH)
 
-## 문서
+- 개발기간: 2025.08.11 ~ (진행중)
+- 배포 주소: https://jobkorea-ai-challenge-fe.netlify.app/
 
-- 구현 링크: [AI Challenge 프로젝트](https://jobkorea-ai-challenge-fe.netlify.app/)
+## 문서 📑
 
 ### 분석
 
@@ -22,61 +23,87 @@ React + TypeScript + Vite 기반의 알바몬 검색조건설정(모바일) UI �
 
 - 개발 일지: [개발 일지](https://palm-flax-489.notion.site/devlog?v=24d99198aab2801a822c000c8b8cddc5&source=copy_link)
 
-## 기술 스택
+## 기술 스택 ⛏
 
-- React 19, TypeScript, Vite
-- Zustand (전역 상태관리)
-- Tailwind CSS (유틸리티 스타일)
-- Framer Motion (애니메이션)
-- ESLint + Prettier (코드 품질/스타일)
+<img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=20232a"> 
+<img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white">
+<img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white">
+<img src="https://img.shields.io/badge/zustand-orange?style=for-the-badge&logo=zustand&logoColor=white">
+<img src="https://img.shields.io/badge/tailwindcss-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white">
+<img src="https://img.shields.io/badge/Framer-0055FF?style=for-the-badge&logo=framer&logoColor=white">
 
-## 프로젝트 구조
+## 프로젝트 구조 🗂
 
 ```
 src/
-  assets/
-    icons/                    # SVG 아이콘
-  components/
-    Category/
-      WorkLocation.tsx        # 근무지역
-      JobCategory.tsx         # 업직종
-      WorkPeriod.tsx          # 근무기간/요일/시간
-      DetailCondition.tsx     # 고용형태/급여/성별/연령/키워드
-    common/
-      Cascader.tsx            # 계층형 선택
-      SearchInput.tsx         # 검색 입력
-      SearchResult.tsx        # 검색 결과
-      Tag.tsx / TagList.tsx   # 태그/칩 UI
-      FilterChipBar.tsx       # 하단 선택 칩 바
-      ToggleButton.tsx        # 모드 전환
-      TimePicker.tsx          # 시간 드롭다운(30분 단위)
-      Slider.tsx              # 연령 슬라이더
-      ModeSection.tsx         # 목록/직접 선택 섹션
-      ToastContainer.tsx      # 토스트 컨테이너
-      Tab/
-        TabContext.tsx
-        TabNavigation.tsx
-    layout/
-      MainLayout.tsx
-      FilterContentLayout.tsx
-  constants/
-    detail.ts                 # 고용형태/급여조건
-    period.ts                 # 근무기간/요일/시간
-    tab.ts                    # 메인 탭
-  fixtures/
-    cascader-data.json        # 지역/업직종 계층 데이터
-  hooks/
-    useToast.ts               # 토스트 훅
-  pages/
-    FilterPage.tsx            # 메인 페이지
-  store/
-    useFilterStore.ts         # 필터 상태(Zustand)
-  styles/
-    globalStyles.css
-  types/
-    cascader.ts, filter.ts 등
-  utils/
-    cascader.ts               # 경로 평면화 유틸(검색)
+├── assets/                    # 정적 자산 (이미지, 아이콘 등)
+│   └── icons/
+│       ├── ArrowBackIcon.svg
+│       └── SearchIcon.svg
+├── components/                # React 컴포넌트들
+│   ├── Category/              # 필터 카테고리별 메인 컴포넌트
+│   │   ├── DetailCondition.tsx
+│   │   ├── JobCategory.tsx
+│   │   ├── WorkLocation.tsx
+│   │   └── WorkPeriod.tsx
+│   ├── common/                # 공통 UI 컴포넌트
+│   │   ├── Tab/               # 탭 네비게이션 관련
+│   │   │   ├── TabContext.tsx
+│   │   │   └── TabNavigation.tsx
+│   │   ├── Cascader.tsx
+│   │   ├── Chip.tsx
+│   │   ├── ExceptDetail.tsx
+│   │   ├── FilterChipBar.tsx
+│   │   ├── Header.tsx
+│   │   ├── KeyWord.tsx
+│   │   ├── KeywordModal.tsx
+│   │   ├── Modal.tsx
+│   │   ├── ModeSection.tsx
+│   │   ├── MoneyInput.tsx
+│   │   ├── SearchInput.tsx
+│   │   ├── SearchResult.tsx
+│   │   ├── SearchResultButton.tsx
+│   │   ├── SelectedFilters.tsx
+│   │   ├── Slider.tsx
+│   │   ├── Tag.tsx
+│   │   ├── TagList.tsx
+│   │   ├── TimePicker.tsx
+│   │   ├── ToastContainer.tsx
+│   │   ├── ToastMessage.tsx
+│   │   └── ToggleButton.tsx
+│   ├── icons/                 # SVG 아이콘 컴포넌트
+│   │   ├── ClosedIcon.tsx
+│   │   └── TabIcon.tsx
+│   └── layout/                # 레이아웃 컴포넌트
+│       ├── FilterContentLayout.tsx
+│       └── MainLayout.tsx
+├── constants/                 # 상수 정의
+│   ├── detail.ts
+│   ├── period.ts
+│   └── tab.ts
+├── fixtures/                  # 정적 데이터 (JSON)
+│   ├── area.json                 # 지역 데이터
+│   ├── condition.json            # 근무조건 데이터
+│   └── job.json                  # 업직종 데이터
+├── hooks/                     # 커스텀 React 훅
+│   └── useToast.ts
+├── pages/                     # 페이지 컴포넌트
+│   └── FilterPage.tsx
+├── store/                     # 상태 관리 (Zustand)
+│   ├── useFilterStore.ts
+│   └── useToastStore.ts
+├── styles/                    # 전역 스타일 파일
+│   └── globalStyles.css
+├── types/                     # TypeScript 타입 정의
+│   ├── cascader.ts
+│   ├── chip.ts
+│   ├── filter.ts
+│   ├── tab.ts
+│   └── toast.ts
+├── utils/                     # 유틸리티 함수
+│   └── cascader.ts
+├── App.tsx
+└── main.tsx
 ```
 
 ## 실행 방법
@@ -100,7 +127,11 @@ npm run dev
 - 프로덕션 빌드: `npm run build`
 - 빌드 프리뷰: `npm run preview`
 
-## 기능 개요(요약)
+## 주요 기능
+
+| 근무지역 | 업직종 | 근무기간 | 상세조건 |
+| -------- | ------ | -------- | -------- |
+|          |        |          |
 
 - 탭 네비게이션: 근무지역 / 업직종 / 근무기간 / 상세조건
 - 상단 선택 칩 영역: 모든 탭의 선택 항목을 통합 표시/개별 삭제
